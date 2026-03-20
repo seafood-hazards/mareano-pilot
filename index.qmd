@@ -1,0 +1,47 @@
+---
+title: "Mareano Pilot Database"
+subtitle: "A pilot study to evaluate the database structure using Mareano chemical data"
+---
+
+This site presents the initial version of the database design and its potential applications using the publicly available [Mareano](https://www.mareano.no/) dataset.
+
+## Pipeline
+
+The database will be a central component of the project for identifying background sediment cores and samples. Dedicated APIs should be implemented to maintain the data with both read and write access. Exported tabular files will be used for data exploration and the main data analysis. 
+
+As the final goal of the project, the results should be submitted to EFSA by exporting the identified segments in the required EFSA format.
+
+![](./image/mareano_pilot.webp){.zoomable}
+
+## Source Data
+
+- Chemical data page at Mareano: [Chemical Data: NGU and IMR](https://www.mareano.no/en/maps-and-data/chemical-data)
+
+From the downloaded `ods` file, the data from the `INFO` and `INORGANIC` sheets were used to create the pilot database.
+
+## Database Design and Creation
+
+After creating the ER (Entity–Relationship) diagram, the tables were implemented in a single SQLite file containing six tables. All required data were extracted from the Mareano tabular file and imported into the corresponding tables.
+
+- See the [DB Schema](./db-schema.qmd) page for details of the database architecture.
+- See the [Invalid Data](./invalid-data.qmd) page for issues identified in the Mareano dataset.
+
+## Geospatial Analysis
+
+To facilitate efficient core and sample selection, distances to the nearest Norwegian coastline were calculated for the MAREANO data. In addition, the nearest country and municipality, as well as the sea and ocean names, were identified based on the core locations.
+
+- See the [Distance Calculation](./distance-to-coast.qmd) page for the methods and results of distance calculation to the nearest coastline.
+- See the [Location Names](./location-names.qmd) page for the estimation of location names from geographic coordinates.
+- See the [Interactive Map](./distance-interactive-map.qmd) page for an interactive visualization of core locations with meta information.
+
+## Data Export
+
+Data can be exported for both exploration and submission.
+
+- See the [Export to Tabular File](./data-export.qmd) page for a description of a single tabular file format (`.tsv.gz`) extracted and merged from all database tables for data exploration.
+- See the [EFSA Format](./efsa-format.qmd) page for a description of the EFSA submission file structure.
+- See the [EFSA Submission](./efsa-format.qmd) page for the mapping between the database fields and the EFSA submission format.
+
+## Tools
+
+- See the [Pilot DB Viewer](./pilot-db-viewer.qmd) page for a read-only view of the pilot database.

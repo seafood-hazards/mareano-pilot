@@ -1,0 +1,56 @@
+name: Publish Quarto Website
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write # To avoid "organization" repository restrictions
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libpng-dev \
+            libgdal-dev \
+            gdal-bin \
+            libproj-dev \
+            libgeos-dev \
+            libudunits2-dev \
+            libtiff5-dev \
+            libcairo2-dev \
+            libxml2-dev \
+            libcurl4-openssl-dev \
+            libnode-dev \
+            libharfbuzz-dev \
+            libfribidi-dev
+
+      - name: Restore renv packages
+        uses: r-lib/actions/setup-renv@v2
+        with:
+          cache-version: 1
+
+      - name: Render site
+        run: quarto render
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: _site        # The folder Quarto generated
+          branch: gh-pages     # The branch to deploy to
+          single-commit: true  # This wipes history to prevent bloat

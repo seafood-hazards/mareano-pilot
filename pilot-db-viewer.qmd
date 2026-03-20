@@ -1,0 +1,102 @@
+---
+title: "Pilot Database Viewer" 
+format: 
+  html:
+    page-layout: full 
+---
+
+This page provides a read-only view of the pilot database. Select a table from the dropdown menu below to view the data.
+
+```{=html}
+<style>
+/* Target the Observable table and force it to fill the container */
+figure {
+  width: 100%;
+  max-width: 100%;
+}
+figure > div {
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%; 
+}
+</style>
+```
+
+```{r}
+#| label: setup-download
+#| output: false
+
+# 1. Define the URL for the SQLite file
+db_url <- "https://github.com/seafood-hazards/pilot-db-with-mareano/releases/download/v0.1.14/pilot_mareano.sqlite"
+local_db_name <- "pilot_mareano.sqlite"
+
+# 2. Download Logic
+if (!file.exists(local_db_name)) {
+  options(timeout = 600)
+  download.file(db_url, destfile = local_db_name, mode = "wb")
+  message("Database downloaded.")
+} else {
+  message("Using existing local database.")
+}
+
+```
+
+```{ojs}
+//| panel: sidebar
+
+// 1. Load Database
+db = FileAttachment("pilot_mareano.sqlite").sqlite()
+
+// 2. Get Table Names
+tables_query = db.query("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%'")
+table_names = tables_query.map(row => row.name)
+
+// 3. Table Selector
+viewof selected_table = Inputs.select(table_names, {
+  label: "Select Table:",
+  value: table_names[0]
+})
+
+// 4. Rows Per Page Selector
+viewof pageSize = Inputs.select([10, 20, 50, 100], {
+  label: "Rows per page:",
+  value: 20
+})
+```
+
+```{ojs}
+//| panel: fill
+
+// 5. Calculate Total Rows for pagination logic
+count_result = db.query(`SELECT COUNT(*) as total FROM "${selected_table}"`)
+total_rows = count_result[0].total
+max_page = Math.ceil(total_rows / pageSize)
+
+// 6. Page Slider
+viewof currentPage = Inputs.range([1, max_page], {
+  label: "Page number:", 
+  step: 1, 
+  value: 1
+})
+
+// Summary Text
+md`**Page ${currentPage}** of ${max_page} &nbsp;*(Total rows: ${total_rows})*`
+
+// 7. Fetch Paged Data
+offset = (currentPage - 1) * pageSize
+data_paged = db.query(`SELECT * FROM "${selected_table}" LIMIT ${pageSize} OFFSET ${offset}`)
+
+// 8. Display Table
+Inputs.table(data_paged, {
+  layout: "auto",
+  rows: pageSize,
+  format: {
+    year: d3.format("d"),
+    start_year: d3.format("d"),
+    end_year: d3.format("d")
+  }
+})
+
+```

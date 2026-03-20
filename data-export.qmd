@@ -1,0 +1,72 @@
+---
+title: "Data Export"
+subtitle: A dataset file exported from the pilot DB
+---
+
+The data file was created for the initial analysis using the Mareano data. 
+
+## Data Availability
+
+A tab-delimited file containing all major data from the database is available for download at the following location.
+
+ * [pilot_mareano.tsv.gz](https://github.com/seafood-hazards/pilot-db-with-mareano/releases/download/v0.1.13/pilot_mareano.tsv.gz)
+
+## Data File Summary
+
+The file `pilot_mareano.tsv.gz` is a denormalized (flat) export of the relational database, designed to facilitate immediate analysis without requiring complex SQL joins.
+
+Each row represents a single **chemical measurement** (e.g., Arsenic, Lead, TOC) for a specific sediment sample. To aid analysis, the following data has been pre-joined to every row:
+
+1.  **Metadata:** Cruise information, core locations (including distance to coast), and sample depths.
+2.  **Granulometry:** The grain size distribution (Clay, Silt, Sand, Gravel) for the sample has been pivoted from rows into columns.
+
+## Column Definition
+
+```{r}
+library(tibble)
+
+# Definition of the exported TSV columns and their sources
+exported_columns_tbl <- tibble(
+  `Column Name` = c(
+    # Keys
+    "cruise_id", "core_id", "sample_id", 
+    
+    # Cruise Metadata
+    "cruise_type", "year",
+    
+    # Core Metadata
+    "core_name", "sampling_tool", "dde", "ddn", "mbsl", "dist_to_coast",
+    
+    # Granulometry (Pivoted from Sediment Table)
+    "clay", "silt", "sand", "gravel",
+    
+    # Sample Metadata
+    "depth_from", "depth_to", 
+    
+    # Chemistry / Measurement Data
+    "element", "parameter", "value", "is_lld",
+    
+    # LLD
+    "lld"
+  ),
+  `Source Table` = c(
+    "Cruise / Core / Sample", "Core / Sample", "Sample",
+    "Cruise", "Cruise",
+    "Core", "Core", "Core", "Core", "Core", "Core",
+    "Sediment (Pivoted)", "Sediment (Pivoted)", "Sediment (Pivoted)", "Sediment (Pivoted)",
+    "Sample", "Sample",
+    "Parameter", "Parameter / Sediment", "Sediment", "Sediment", "LLD"
+  ),
+  `Description` = c(
+    "Unique Cruise Identifier", "Unique Core Identifier", "Unique Sample Identifier",
+    "Cruise type (Mareano Cruise/Marine Basecamp Cruise)", "Year of the cruise",
+    "Short name of the core", "Tool used for sampling", "Decimal Degrees East", "Decimal Degrees North", "Meters Below Sea Level", "Distance to nearest Norwegian coastline (km)",
+    "Clay fraction (%)", "Silt fraction (%)", "Sand fraction (%)", "Gravel fraction (%)",
+    "Top depth of sample interval (cm)", "Bottom depth of sample interval (cm)",
+    "Chemical element name", "Specific parameter measured (element name + method)", "Measured value", "Flag: 1 if value is Lower Level Detection (LLD)",
+    "Lower limits of detection (LLD) value"
+  )
+)
+
+exported_columns_tbl
+```

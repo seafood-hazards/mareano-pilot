@@ -1,0 +1,11 @@
+/.project
+.Rproj.user
+
+/.quarto/
+**/*.quarto_ipynb
+/_site/
+/.Rhistory
+
+/.idea
+
+*.sqlite
