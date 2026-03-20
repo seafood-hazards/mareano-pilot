@@ -1,0 +1,331 @@
+[
+  {
+    "objectID": "distance-interactive-map.html",
+    "href": "distance-interactive-map.html",
+    "title": "Interactive Map of Core Locations",
+    "section": "",
+    "text": "NoteNote on Distance Accuracy\n\n\n\nCalculated distances represent the shortest Euclidean path to the nearest coastline geometry (GSHHG dataset).\nWhile the data is projected (EPSG:3035) to minimize distortion at high latitudes, please interpret these values as estimates. In areas with complex topography—such as narrow fjords or dense archipelagos—the resolution of the coastline vector data may result in minor deviations from real-world measurements."
+  },
+  {
+    "objectID": "distance-interactive-map.html#interactive-map",
+    "href": "distance-interactive-map.html#interactive-map",
+    "title": "Interactive Map of Core Locations",
+    "section": "Interactive Map",
+    "text": "Interactive Map\nThe map below displays the spatial distribution of sediment cores. The markers are color-coded based on their distance from the nearest Norwegian coastline.\nHow to use this map:\n\nZoom and Pan to explore specific coastal areas or offshore regions.\nClick the Globe icon   to reset the view.\nFilter the data by toggling distance categories in the top-right menu (e.g., uncheck boxes to hide specific ranges).\nUse the Legend in the bottom right to interpret the color coding.\nHover over a point to quickly identify the Cruise ID and Core ID.\nClick on a marker to view exact coordinates, distance to shore (in km), and location names."
+  },
+  {
+    "objectID": "distance-to-coast.html",
+    "href": "distance-to-coast.html",
+    "title": "Distance Calculation",
+    "section": "",
+    "text": "As the initial data analysis will be performed on the Mareano cores/samples located within Norwegian fjords and surrounding areas near the Norwegian coastline, the distances to the nearest coastline were calculated.\nThe distance data is available in the dist_to_coast column of the Core table."
+  },
+  {
+    "objectID": "distance-to-coast.html#sediment-core-locations",
+    "href": "distance-to-coast.html#sediment-core-locations",
+    "title": "Distance Calculation",
+    "section": "Sediment Core Locations",
+    "text": "Sediment Core Locations\n\nDistance Calculation\n\n\n\nCount of Four Groups\nThe table summarises how many observations fall into each of the four groups, broken down by distance categories.\n\n\n\n\n\n\nDistance\n# Sediment Cores\n\n\n\n\n0 to 10km\n70\n\n\n10 to 30km\n26\n\n\n30 to 100km\n122\n\n\n≥100km\n165"
+  },
+  {
+    "objectID": "distance-to-coast.html#methods",
+    "href": "distance-to-coast.html#methods",
+    "title": "Distance Calculation",
+    "section": "Methods",
+    "text": "Methods\nCoastline data were derived from the Global Self-consistent, Hierarchical, High-resolution Geography (GSHHG) database. High-resolution shoreline polygons were extracted for the region covering the Norwegian mainland and the Svalbard archipelago. The coastline geometry was cleaned and filtered to ensure topological validity before calculation.\nTo ensure accurate measurements at high latitudes, where standard global projections (like Mercator) distort distances, all spatial data were projected to the ETRS89-extended Lambert Azimuthal Equal Area projection (EPSG:3035). This Coordinate Reference System is the standard for pan-European statistical mapping and minimizes distortion across the region. The shortest Euclidean distance from each sampling (core) site to the nearest Norwegian coastline geometry was then calculated in meters.\nThe calculation was performed using the sf library in R."
+  },
+  {
+    "objectID": "invalid-data.html",
+    "href": "invalid-data.html",
+    "title": "Invalid Data",
+    "section": "",
+    "text": "The page presents the invalid data identified during the database creation process. Because the database enforces stringent constraints on the data structure, the data must be corrected before it can be imported into the database tables."
+  },
+  {
+    "objectID": "invalid-data.html#invalid-full-ids",
+    "href": "invalid-data.html#invalid-full-ids",
+    "title": "Invalid Data",
+    "section": "Invalid Full IDs",
+    "text": "Invalid Full IDs\n\n\n\n\n\n\nWarning\n\n\n\nSeveral Full IDs were generated with incorrect formats, wrong cruise numbers, or invalid core identifiers. These must be corrected before import.\n\n\n\nExcel Sheet: INORGANIC\nRange: Column A\n\nMore than 100 Full IDs were incorrectly generated in the source data. Below are representative examples with the corrected values and a short explanation.\n\n\n\nExamples of invalid Full IDs and their corrections.\n\n\n\n\n\n\n\n\n\n\n\nFull ID (icorrect format)\nExpected ID\nYear\nNumber\nTool\nID\nIssue\n\n\n\n\n2008104R0243GR037c0_Gr-243\n2008104R0243GR037c0_00-01\n2008\n104\nGR\n037\nFormat incorrect (used ‘Gr-243’ instead of depth interval)\n\n\n2009111R0447BC481c0_00-01\n2009105R0447BC481c0_00-01\n2009\n105\nBC\n481\nWrong cruise number\n\n\n2011113R0749MC020c3_03-04\n2011113R0749MC020c0_03-04\n2011\n113\nMC\n020\nUsed core ID (c3) instead of base (c0)\n\n\n2020104R2139MC008c1_14-15\n2020104R2139MC008c1_15-16\n2020\n104\nMC\n8\nIncorrect core layer interval"
+  },
+  {
+    "objectID": "invalid-data.html#sample-and-sediment",
+    "href": "invalid-data.html#sample-and-sediment",
+    "title": "Invalid Data",
+    "section": "Sample and Sediment",
+    "text": "Sample and Sediment\n\n\n\n\n\n\nWarning\n\n\n\nThe dataset contains duplicate sample rows and several depth intervals that do not match expected layer boundaries. These issues require deletion or interval correction.\n\n\n\nExcel Sheet: INORGANIC\nRanges for duplication:\n\n2021P2009010_0-2: A3312:K3312 & A3319:K3319\n2021P2009012_0-2: A3313:K3313 & A3328:K3328\n2021P2009015_0-2: A3315:K3315 & A3337:K3337\n\nRanges for invalid depth intervals:\n\n2021104R2669MC15c1_9-10: A3487:K3487\n2021115R2770MC17c1_9-10: A3509:K3509\n2021115R2869MC19c1_9-10: A3532:K3532\n\n\nThe following rule table drives deletions of duplicate rows and corrections of invalid depth intervals. These rules are applied during the data standardization step.\n\n\n\nRules applied to Sample and Sediment data.\n\n\n\n\n\n\n\n\n\n\n\nFull ID\nAction\nOld from\nOld to\nNew from\nNew to\nComment\n\n\n\n\n2021P2009010_0-2\ndelete\nNA\nNA\nNA\nNA\nDuplicate entry\n\n\n2021P2009012_0-2\ndelete\nNA\nNA\nNA\nNA\nDuplicate entry\n\n\n2021P2009015_0-2\ndelete\nNA\nNA\nNA\nNA\nDuplicate entry\n\n\n2021104R2669MC15c1_9-10\nfix\n8\n9\n9\n10\nCorrect interval (from/to)\n\n\n2021115R2770MC17c1_9-10\nfix\n8\n9\n9\n10\nCorrect interval (from/to)\n\n\n2021115R2869MC19c1_9-10\nfix\n8\n9\n9\n10\nCorrect interval (from/to)"
+  },
+  {
+    "objectID": "invalid-data.html#cruise-information",
+    "href": "invalid-data.html#cruise-information",
+    "title": "Invalid Data",
+    "section": "Cruise Information",
+    "text": "Cruise Information\n\n\n\n\n\n\nWarning\n\n\n\nA duplicated cruise entry appears in the metadata and must be removed to maintain unique cruise identifiers.\n\n\n\nExcel Sheet: INFO\nRange: P83:V83\n\nThe rule below removes a known duplicate entry from the cruise metadata.\n\n\n\nRule applied to cruise metadata.\n\n\nCruise No\nAction\nReason\n\n\n\n\n26\ndelete\nDuplicate cruise"
+  },
+  {
+    "objectID": "invalid-data.html#element-definitions",
+    "href": "invalid-data.html#element-definitions",
+    "title": "Invalid Data",
+    "section": "Element Definitions",
+    "text": "Element Definitions\n\n\n\n\n\n\nWarning\n\n\n\nThe element list is missing a required Sulfur entry, which must be added for completeness.\n\n\n\nExcel Sheet: INFO\nRange: A141:G141\n\nA missing Sulfur row is added to ensure completeness of element definitions.\n\n\n\nElement definition additions.\n\n\nParameter\nElement\nMethod1\nMethod2\nInstitute\n\n\n\n\nS_p\nSulfur\nNA\nNA\nNGU-Laboratory"
+  },
+  {
+    "objectID": "invalid-data.html#sample-batch-ids",
+    "href": "invalid-data.html#sample-batch-ids",
+    "title": "Invalid Data",
+    "section": "Sample Batch IDs",
+    "text": "Sample Batch IDs\n\n\n\n\n\n\nWarning\n\n\n\nSample batch IDs are required to look up lower limits of detection (LLD), but many are missing in the LLD table. This issue is particularly common for samples collected during the Mareano cruise in 2021, where several entries lack proper batch IDs.\n\n\n\nExcel Sheets: INFO & INORGANIC\nRanges: H91:AF141 in INFO & Column O in INORGANIC\n\nThe table below lists sample batch IDs that have no associated LLD values. It also includes a few samples from the Mareano 2021 cruise that do have valid batch IDs but still lack corresponding LLD entries.\n\n\n\nBatch IDs without associated LLD.\n\n\nCruise ID\nBatch ID\n\n\n\n\nMA-2007-105\n2008.0009\n\n\nMA-2007-111\n2008.0009\n\n\nMA-2009-105\n2010.021\n\n\nMA-2009-111\n2010.021\n\n\nMA-2010-110\n2011.003\n\n\nMA-2010-112\n2011.003\n\n\nMA-2020-2002\n2020.0118\n\n\nMA-2021-2005\n2020.0161\n\n\nMA-2021-2102\n2021.211"
+  },
+  {
+    "objectID": "db-schema.html",
+    "href": "db-schema.html",
+    "title": "DB Schema",
+    "section": "",
+    "text": "The page shows the database schema diagram along with table definitions based on the Mareano dataset."
+  },
+  {
+    "objectID": "db-schema.html#db-schema-diagram",
+    "href": "db-schema.html#db-schema-diagram",
+    "title": "DB Schema",
+    "section": "DB Schema Diagram",
+    "text": "DB Schema Diagram\nThe proposed database design shown in the ER (Entity Relationship) diagram below contains six tables including three meta (entity) tables, one variable (look-up or reference) table, one fact (measurement) table, and one mixed meta and measurement table.\nThe columns with PK in the diagram indicate primary keys of the table, which guarantees unique identifications. All tables are connected by one-to-many relationships, except for the LLD table (lld). This table is optional for the parameter table but forms a many-to-many relationship with the sample table.\n\n\n\n\n\n\n\nWarning\n\n\n\nA direct SQL join must not be performed between the lld and sample tables due to their many-to-many relationship."
+  },
+  {
+    "objectID": "db-schema.html#cruise-table",
+    "href": "db-schema.html#cruise-table",
+    "title": "DB Schema",
+    "section": "Cruise Table",
+    "text": "Cruise Table\nThe cruise table includes Mareano cruise information and is a parent of the core table.\n\nCruise ID\nThe ID values in the cruise_id column are formulated as follows:\n\ncruise_id: MA-{year}-{cruise_no}\n\n\n\nTable Columns\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nData Type\nPK\nNA Allowed\nDescription\n\n\n\n\ncruise_id\nTEXT\n✓\nFALSE\nPrimary Key. Unique cruise identifier (e.g., MA-2003-209).\n\n\nsource\nTEXT\n\nFALSE\nData source (Mareano).\n\n\ncruise_type\nTEXT\n\nFALSE\nCruise type (Mareano Cruise/Marine Basecamp Cruise).\n\n\nyear\nINTEGER\n\nFALSE\nYear of the cruise.\n\n\ncruise_no\nINTEGER\n\nTRUE\nCruise number.\n\n\nstart\nTEXT\n\nTRUE\nStart date of the cruise\n\n\nend\nTEXT\n\nTRUE\nEnd date of the cruise\n\n\nstart_year\nINTEGER\n\nTRUE\nStart year of the cruise\n\n\nstart_month\nINTEGER\n\nTRUE\nStart month of the cruise\n\n\nstart_day\nINTEGER\n\nTRUE\nStart day of the cruise\n\n\nend_year\nINTEGER\n\nTRUE\nEnd year of the cruise\n\n\nend_month\nINTEGER\n\nTRUE\nEnd month of the cruise\n\n\nend_day\nINTEGER\n\nTRUE\nEnd day of the cruise\n\n\narea\nINTEGER\n\nTRUE\nSurvey area.\n\n\ncruise_no2\nINTEGER\n\nTRUE\nAlternative cruise number."
+  },
+  {
+    "objectID": "db-schema.html#core-table",
+    "href": "db-schema.html#core-table",
+    "title": "DB Schema",
+    "section": "Core Table",
+    "text": "Core Table\nThe core table includes sediment core information and is a parent of the sample table.\n\nCore ID\nThe ID values in the core_id column are formulated as follows:\n\ncore_id: {station_no}-{sampling_tool}-{core_name}\n\nThe {sampling_tool} part is three characters, padded with zeros, while the {core_name} part is two characters (or “00” if not available).\n\n\nTable Columns\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nData Type\nPK\nNA Allowed\nDescription\n\n\n\n\ncruise_id\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Cruise table.\n\n\ncore_id\nTEXT\n✓\nFALSE\nPrimary Key. Unique core identifier (e.g., R0625-BC-000-c1).\n\n\nstation_no\nTEXT\n\nTRUE\nStation number.\n\n\nsampling_tool\nTEXT\n\nTRUE\nSampling tool code (BC, MC, GR).\n\n\ntool_id\nTEXT\n\nTRUE\nSpecific tool identifier.\n\n\ncore_name\nTEXT\n\nTRUE\nShort core name.\n\n\ndde\nREAL\n\nFALSE\nLongitude (Decimal Degrees East).\n\n\nddn\nREAL\n\nFALSE\nLatitude (Decimal Degrees North).\n\n\nmbsl\nREAL\n\nTRUE\nWater depth (Meters Below Sea Level).\n\n\ndist_to_coast\nINTEGER\n\nTRUE\nDistance to the nearest Norwegian coastline (km)."
+  },
+  {
+    "objectID": "db-schema.html#sample-table",
+    "href": "db-schema.html#sample-table",
+    "title": "DB Schema",
+    "section": "Sample Table",
+    "text": "Sample Table\nThe sample table includes specific sediment sample intervals and is a child of the core table.\n\nSample ID\nThe ID values in the sample_id column are formulated as follows:\n\nsample_id: {core_name}-{depth_from}-{depth_to}\n\nAll parts are two characters, padded with zeros.\n\n\nTable Columns\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nData Type\nPK\nNA Allowed\nDescription\n\n\n\n\ncruise_id\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Cruise table.\n\n\ncore_id\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Core table.\n\n\nsample_id\nTEXT\n✓\nFALSE\nPrimary Key. Unique sample identifier (e.g., c1_00-02).\n\n\ndepth_from\nINTEGER\n\nFALSE\nTop depth of the sample interval (cm).\n\n\ndepth_to\nINTEGER\n\nFALSE\nBottom depth of the sample interval (cm).\n\n\nbatch_id\nTEXT\n\nTRUE\nLaboratory batch identifier.\n\n\nsample_id2\nTEXT\n\nTRUE\nAlternative sample identifier."
+  },
+  {
+    "objectID": "db-schema.html#parameter-table",
+    "href": "db-schema.html#parameter-table",
+    "title": "DB Schema",
+    "section": "Parameter Table",
+    "text": "Parameter Table\nThe parameter table is a look-up table that contains parameter information for the sediment table.\n\nTable Columns\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nData Type\nPK\nNA Allowed\nDescription\n\n\n\n\nparameter\nTEXT\n✓\nFALSE\nPrimary Key. Name of the measured parameter (e.g., Se, Cd_a).\n\n\nunit\nTEXT\n\nTRUE\nUnit of measurement (e.g., mg/kg, %).\n\n\nelement\nTEXT\n\nTRUE\nChemical element (e.g., Selenium, Cadmium).\n\n\nmethod1\nTEXT\n\nTRUE\nPrimary analytical method.\n\n\nmethod2\nTEXT\n\nTRUE\nSecondary analytical method.\n\n\ninstitute\nTEXT\n\nTRUE\nInstitute responsible for the analysis."
+  },
+  {
+    "objectID": "db-schema.html#sediment-table",
+    "href": "db-schema.html#sediment-table",
+    "title": "DB Schema",
+    "section": "Sediment Table",
+    "text": "Sediment Table\nThe sediment table contains measurements for all parameters.\n\nTable Columns\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nData Type\nPK\nNA Allowed\nDescription\n\n\n\n\ncruise_id\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Cruise table.\n\n\ncore_id\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Core table.\n\n\nsample_id\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Sample table.\n\n\nparameter\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Parameter table.\n\n\nvalue\nREAL\n\nFALSE\nMeasured value.\n\n\nis_lld\nINTEGER\n\nFALSE\nFlag: 1 if value is Lower Level Detection (LLD), 0 otherwise.\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe is_lld column indicates if the value is LLD (Lower Level of Detection). For example, if the original value is “&lt;5”, the value is set to “5”, but is_lld is set to 1 (TRUE) instead of the default 0 (FALSE)."
+  },
+  {
+    "objectID": "db-schema.html#lld-table",
+    "href": "db-schema.html#lld-table",
+    "title": "DB Schema",
+    "section": "LLD Table",
+    "text": "LLD Table\nThe lld table stores the Lower Level of Detection (LLD) values for measured elements, defined per sample batch.\n\nTable Columns\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nData Type\nPK\nNA Allowed\nDescription\n\n\n\n\nbatch_id\nTEXT\n✓\nFALSE\nPrimary Key. Batch ID shared with Sample table.\n\n\nparameter\nTEXT\n✓\nFALSE\nPrimary Key. Foreign Key to Parameter table.\n\n\nvalue\nREAL\n\nFALSE\nLLD value."
+  },
+  {
+    "objectID": "efsa-format.html",
+    "href": "efsa-format.html",
+    "title": "EFSA Format",
+    "section": "",
+    "text": "The page presents the the data format of the EFDA reporting tool necessary for submitting the background sediment data."
+  },
+  {
+    "objectID": "efsa-format.html#efsa-report",
+    "href": "efsa-format.html#efsa-report",
+    "title": "EFSA Format",
+    "section": "Report on Trace Elements",
+    "text": "Report on Trace Elements\nThe details of EFSA submission and their objectives are described in this call from EFSA.\n\nData on natural background concentrations of trace elements (cobalt, copper, iodine, manganese, molybdenum, selenium, and zinc)\nTrace element concentrations in marine sediment along the coasts of EU, EFTA, and EU candidate countries (including fjords and estuaries)\nSamples collected within the last 15 years (2009 to present)\nSamples from pristine areas (defined as areas unaffected by point or diffuse pollution sources)\nSupporting metadata regarding porewater pH, sediment texture (% clay &lt;2 µm, % silt 2–63 µm, % sand &gt;63 µm), and organic matter content (%)"
+  },
+  {
+    "objectID": "efsa-format.html#column-format",
+    "href": "efsa-format.html#column-format",
+    "title": "EFSA Format",
+    "section": "Column Format",
+    "text": "Column Format\n\n\n\n\n\n\n\n\n\n\n\n\nField Label\nField Name\nDescription\nCatalogue\nOptionality\n\n\n\n\nsampleId\nSample Identifier\nSample identification according to the data provider.\n\nMandatory\n\n\nrecId\nRecord Identifier\nAutomatically generated unique identifier by concatenation of sample identifier and speciation.\n\nMandatory\n\n\nenvComp\nEnvironmental Compartment\nSelect the compartment in which the sample was collected.\nenvComp\nMandatory\n\n\npristineLoc\nPristine Location\nYES/NO if area sampled was affected by pollution.\nyesNo\nMandatory\n\n\nsampleLocGC\nSampling Location Geographical Coordinates\nLatitude and longitude in decimal degrees.\n\nMandatory\n\n\nsampleLocCM\nSampling Location Country, Municipality\nCountry and municipality of sampling location.\n\nMandatory\n\n\nsampleDate\nSampling Date\nDate of sample collection.\n\nMandatory\n\n\ntraceEl\nTrace Element\nTrace element measured.\ntraceEl\nMandatory\n\n\nspec\nSpeciation\nOxidation state of the trace element.\nspec\nMandatory\n\n\nconc\nMeasured Concentration\nAnalytical result of concentration.\n\nMandatory\n\n\nmethAn\nMethod of Analysis\nMethod used to measure concentration.\nmethAn\nMandatory\n\n\nunit\nunit\nUnit of the relevant data element.\nunit\nMandatory\n\n\nweight\nExpression of product\nDry weight or wet weight.\nweight\nDependent Mandatory\n\n\nLOD\nLimit of Detection\nLimit of detection.\n\nOptional\n\n\nLOQ\nLimit of Quantification\nLimit of quantification.\n\nOptional\n\n\naccLab\nAccredited Laboratory\nYES/NO if laboratory is accredited.\nyesNo\nOptional\n\n\nphSed\npH of porewater of the Sediment\nMeasured pH of porewater in sediment.\n\nOptional\n\n\nTextureSedClay\nTexture of the Clay Sediment\nClay fraction (% dw).\n\nOptional\n\n\nTextureSedSilt\nTexture of the Silt Sediment\nSilt fraction (% dw).\n\nOptional\n\n\nTextureSedSand\nTexture of the Sand Sediment\nSand fraction (% dw).\n\nOptional\n\n\nocSed\nOrganic Content of the Sediment\nOrganic matter in sediment (% dw).\n\nOptional\n\n\nphWater\npH of Water\nMeasured pH of water.\n\nOptional\n\n\nhardWat\nHardness of Water\nWater hardness category.\nhardWater\nOptional\n\n\nDOC\nDissolved Organic Carbon of Water\nDissolved organic carbon (mg/L).\n\nOptional\n\n\npublicData\nData publicly available\nYES/NO if data are publicly available.\nyesNo\nOptional\n\n\nrefPublication\nReference to the published data\nReference to publication.\n\nOptional\n\n\ncomments\nComments\nOpen comments field.\n\nOptional"
+  },
+  {
+    "objectID": "efsa-format.html#catalogue-data",
+    "href": "efsa-format.html#catalogue-data",
+    "title": "EFSA Format",
+    "section": "Catalogue Data",
+    "text": "Catalogue Data\n\nenvComp\n\n\n\n\n\n\n\n\n\n\n\n\nTerm Name\nTerm Code\nDescription\nNote\n\n\n\n\nsoil\nA16PE\nLand\nGroup covering the samples for analysis of different types of lands and grounds.\n\n\nfreshwater\nA0F7G\nNaturally occurring freshwater\nFreshwater excluding sea- and brackish water.\n\n\nfreshwater sediment\nA198T#F34.A0F7G\nSediment, HOST-SAMPLED = Naturally occurring freshwater\nNaturally occurring solid material transported by natural forces.\n\n\nmarine sediment\nA198T#F34.A16YY\nSediment, HOST-SAMPLED = Seawater\nNaturally occurring solid material transported by natural forces.\n\n\n\n\n\n\n\n\nyesNo\n\n\n\n\n\n\nTerm Name\nTerm Code\n\n\n\n\nNo\nN\n\n\nYes\nY\n\n\n\n\n\n\n\n\ntraceEl\n\n\n\n\n\n\nTerm Name\nTerm Code\n\n\n\n\nCo\nRF-00000161-CHE\n\n\nCu\nRF-00000167-CHE\n\n\nI\nRF-00000050-CHE\n\n\nMn\nRF-00000176-CHE\n\n\nMo\nRF-00000179-CHE\n\n\nSe\nRF-00000184-CHE\n\n\nZn\nRF-00000205-CHE\n\n\n\n\n\n\n\n\nspec\n\n\n\n\n\n\nTerm Name\nTerm Code\n\n\n\n\nCo (Total)\nRF-00000162-CHE\n\n\nCo(+II)\n\n\n\nCo(+III)\n\n\n\nOther\n\n\n\nCu (Total)\nRF-00000168-CHE\n\n\nCu(+I)\n\n\n\nCu(+II)\n\n\n\nOther\n\n\n\nI (Total)\ncheck CAS number, ECHA\n\n\nI(-I)\nRF-00000310-NTR\n\n\niodide\n\n\n\nI(+I)\n\n\n\nI(+III)\nRF-00000049-CHE\n\n\nIodates\n\n\n\nI(+V)\n\n\n\nI(+VII)\n\n\n\nOther\n\n\n\nMn (Total)\nRF-00000177-CHE\n\n\nMn(+II)\n\n\n\nMn(+IV)\n\n\n\nMn(+VI)\n\n\n\nMn(+VII)\n\n\n\nOther\n\n\n\nMo (Total)\nRF-00000180-CHE\n\n\nMo(+IV)\n\n\n\nMo(+VI)\n\n\n\nOther\n\n\n\nSe (Total)\nRF-00000186-CHE\n\n\nSe(-II)\n\n\n\nSe(+II)\n\n\n\nSe(+IV)\n\n\n\nOther\n\n\n\nZn (Total)\nRF-00000206-CHE\n\n\nZn(+II)\n\n\n\nOther\n\n\n\n\n\n\n\n\n\nmethAn\n\n\n\n\n\n\n\n\n\n\n\nTerm Name\nTerm Code\nNote\n\n\n\n\nICP-MS\nF064A\nInductively coupled plasma mass spectrometry\n\n\nICP-AES\nF057A\nInductively coupled plasma atomic emission spectroscopy\n\n\nFAAS\nF350A\nFlame atomic absorption spectrometry\n\n\nETAAS (GFAAS)\nF054A\nElectrothermal atomic absorption spectrometry\n\n\nWD-XRFS\nF832A\nWavelength Dispersive X-Ray Fluorescence Spectroscopy\n\n\nIC-UV/VIS\nF833A\nIon Chromatography UV/VIS detection\n\n\nHPLC-ICP-MS\nF029A\nHigh performance liquid chromatography ICP-MS\n\n\nGC-ICP-MS\nF366A\nGas Chromatography ICP-MS\n\n\nOther\nNA\nNA\n\n\n\n\n\n\n\n\nunit\n\n\n\n\n\n\nTerm Name\nTerm Code\nData Element (Field Label)\n\n\n\n\nmg/kg\nG061A\nconc\n\n\nng/kg\nG077A\nconc\n\n\n%\nG138A\nconc\n\n\nmol\nG119A\nconc\n\n\nmmol\nG115A\nconc\n\n\n%\nG138A\nconc\n\n\n%\nG138A\nocSed\n\n\nmg/L\nG062A\nDOC\n\n\n\n\n\n\n\n\nweight\n\n\n\n\n\n\nTerm Name\nTerm Code\nNote\n\n\n\n\ndw\nB002A\nDry matter, dry weight\n\n\nww\nB001A\nDry matter, dry weight\n\n\n\n\n\n\n\n\nhardWater\n\n\n\n\n\n\nTerm Name\nDescription\n\n\n\n\nSoft\n0–60 mg CaCO3/L or 0–0.6 mmol/L or 0–3.37 dGH\n\n\nModerate\n61–120 mg CaCO3/L or 0.61–1.20 mmol/L or 3.38–6.74 dGH\n\n\nHard\n121–180 mg CaCO3/L or 1.21–1.80 mmol/L or 6.75–10.11 dGH\n\n\nVery hard\n≥181 mg CaCO3/L or ≥1.81 mmol/L or ≥10.12 dGH"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Mareano Pilot Database",
+    "section": "",
+    "text": "This site presents the initial version of the database design and its potential applications using the publicly available Mareano dataset."
+  },
+  {
+    "objectID": "index.html#pipeline",
+    "href": "index.html#pipeline",
+    "title": "Mareano Pilot Database",
+    "section": "Pipeline",
+    "text": "Pipeline\nThe database will be a central component of the project for identifying background sediment cores and samples. Dedicated APIs should be implemented to maintain the data with both read and write access. Exported tabular files will be used for data exploration and the main data analysis.\nAs the final goal of the project, the results should be submitted to EFSA by exporting the identified segments in the required EFSA format."
+  },
+  {
+    "objectID": "index.html#source-data",
+    "href": "index.html#source-data",
+    "title": "Mareano Pilot Database",
+    "section": "Source Data",
+    "text": "Source Data\n\nChemical data page at Mareano: Chemical Data: NGU and IMR\n\nFrom the downloaded ods file, the data from the INFO and INORGANIC sheets were used to create the pilot database."
+  },
+  {
+    "objectID": "index.html#database-design-and-creation",
+    "href": "index.html#database-design-and-creation",
+    "title": "Mareano Pilot Database",
+    "section": "Database Design and Creation",
+    "text": "Database Design and Creation\nAfter creating the ER (Entity–Relationship) diagram, the tables were implemented in a single SQLite file containing six tables. All required data were extracted from the Mareano tabular file and imported into the corresponding tables.\n\nSee the DB Schema page for details of the database architecture.\nSee the Invalid Data page for issues identified in the Mareano dataset."
+  },
+  {
+    "objectID": "index.html#geospatial-analysis",
+    "href": "index.html#geospatial-analysis",
+    "title": "Mareano Pilot Database",
+    "section": "Geospatial Analysis",
+    "text": "Geospatial Analysis\nTo facilitate efficient core and sample selection, distances to the nearest Norwegian coastline were calculated for the MAREANO data. In addition, the nearest country and municipality, as well as the sea and ocean names, were identified based on the core locations.\n\nSee the Distance Calculation page for the methods and results of distance calculation to the nearest coastline.\nSee the Location Names page for the estimation of location names from geographic coordinates.\nSee the Interactive Map page for an interactive visualization of core locations with meta information."
+  },
+  {
+    "objectID": "index.html#data-export",
+    "href": "index.html#data-export",
+    "title": "Mareano Pilot Database",
+    "section": "Data Export",
+    "text": "Data Export\nData can be exported for both exploration and submission.\n\nSee the Export to Tabular File page for a description of a single tabular file format (.tsv.gz) extracted and merged from all database tables for data exploration.\nSee the EFSA Format page for a description of the EFSA submission file structure.\nSee the EFSA Submission page for the mapping between the database fields and the EFSA submission format."
+  },
+  {
+    "objectID": "index.html#tools",
+    "href": "index.html#tools",
+    "title": "Mareano Pilot Database",
+    "section": "Tools",
+    "text": "Tools\n\nSee the Pilot DB Viewer page for a read-only view of the pilot database."
+  },
+  {
+    "objectID": "data-export.html",
+    "href": "data-export.html",
+    "title": "Data Export",
+    "section": "",
+    "text": "The data file was created for the initial analysis using the Mareano data."
+  },
+  {
+    "objectID": "data-export.html#data-availability",
+    "href": "data-export.html#data-availability",
+    "title": "Data Export",
+    "section": "Data Availability",
+    "text": "Data Availability\nA tab-delimited file containing all major data from the database is available for download at the following location.\n\npilot_mareano.tsv.gz"
+  },
+  {
+    "objectID": "data-export.html#data-file-summary",
+    "href": "data-export.html#data-file-summary",
+    "title": "Data Export",
+    "section": "Data File Summary",
+    "text": "Data File Summary\nThe file pilot_mareano.tsv.gz is a denormalized (flat) export of the relational database, designed to facilitate immediate analysis without requiring complex SQL joins.\nEach row represents a single chemical measurement (e.g., Arsenic, Lead, TOC) for a specific sediment sample. To aid analysis, the following data has been pre-joined to every row:\n\nMetadata: Cruise information, core locations (including distance to coast), and sample depths.\nGranulometry: The grain size distribution (Clay, Silt, Sand, Gravel) for the sample has been pivoted from rows into columns."
+  },
+  {
+    "objectID": "data-export.html#column-definition",
+    "href": "data-export.html#column-definition",
+    "title": "Data Export",
+    "section": "Column Definition",
+    "text": "Column Definition\n\n\n\n\n\n\n\n\n\n\n\nColumn Name\nSource Table\nDescription\n\n\n\n\ncruise_id\nCruise / Core / Sample\nUnique Cruise Identifier\n\n\ncore_id\nCore / Sample\nUnique Core Identifier\n\n\nsample_id\nSample\nUnique Sample Identifier\n\n\ncruise_type\nCruise\nCruise type (Mareano Cruise/Marine Basecamp Cruise)\n\n\nyear\nCruise\nYear of the cruise\n\n\ncore_name\nCore\nShort name of the core\n\n\nsampling_tool\nCore\nTool used for sampling\n\n\ndde\nCore\nDecimal Degrees East\n\n\nddn\nCore\nDecimal Degrees North\n\n\nmbsl\nCore\nMeters Below Sea Level\n\n\ndist_to_coast\nCore\nDistance to nearest Norwegian coastline (km)\n\n\nclay\nSediment (Pivoted)\nClay fraction (%)\n\n\nsilt\nSediment (Pivoted)\nSilt fraction (%)\n\n\nsand\nSediment (Pivoted)\nSand fraction (%)\n\n\ngravel\nSediment (Pivoted)\nGravel fraction (%)\n\n\ndepth_from\nSample\nTop depth of sample interval (cm)\n\n\ndepth_to\nSample\nBottom depth of sample interval (cm)\n\n\nelement\nParameter\nChemical element name\n\n\nparameter\nParameter / Sediment\nSpecific parameter measured (element name + method)\n\n\nvalue\nSediment\nMeasured value\n\n\nis_lld\nSediment\nFlag: 1 if value is Lower Level Detection (LLD)\n\n\nlld\nLLD\nLower limits of detection (LLD) value"
+  },
+  {
+    "objectID": "CHANGELOG.html",
+    "href": "CHANGELOG.html",
+    "title": "Changelog",
+    "section": "",
+    "text": "All notable changes to this project will be documented in this file.\nThe format is based on Keep a Changelog. As this project is still in active development, it does not yet strictly adhere to Semantic Versioning.\n\n\n\n\n\n\n\n\nAll Quarto files from pilot-db-mareano"
+  },
+  {
+    "objectID": "CHANGELOG.html#section",
+    "href": "CHANGELOG.html#section",
+    "title": "Changelog",
+    "section": "",
+    "text": "All Quarto files from pilot-db-mareano"
+  },
+  {
+    "objectID": "efsa-submission.html",
+    "href": "efsa-submission.html",
+    "title": "EFSA Submission",
+    "section": "",
+    "text": "The page presents the data export of trace elements in background sediments from the pilot database."
+  },
+  {
+    "objectID": "efsa-submission.html#data-mapping-for-submission",
+    "href": "efsa-submission.html#data-mapping-for-submission",
+    "title": "EFSA Submission",
+    "section": "Data Mapping for Submission",
+    "text": "Data Mapping for Submission\n\n\n\n\n\n\n\n\n\n\n\n\n\nColumn\nOptionality\nSource Table\nSoruce Columns\nFixed Text\n\n\n\n\nsampleId\nMandatory\nSediment\ncruise_id + core_id + sample_id\n\n\n\nenvComp\nMandatory\n\n\nmarine sediment\n\n\npristineLoc\nMandatory\n\n\nYes\n\n\nsampleLocGC\nMandatory\nCore\nddn + dde\n\n\n\nsampleLocCM\nMandatory\nCore\ncountry + municipality\n\n\n\nsampleDate\nMandatory\nCruise\nstart_year + start_month + start_date\n\n\n\ntraceElText\nMandatory\nParameter\nsymbol\n\n\n\nspecText\nMandatory\nParameter\nsymbol + ” (Total)”\n\n\n\nconc\nMandatory\nSediment\nvalue\n\n\n\nunitText\nMandatory\nParameter\nunit\n\n\n\nweightText\nMandatory\n\n\ndw\n\n\nmethAnText\nMandatory\nParameter\nmethod1\n\n\n\nLOD\nOptional\nLLD\nvalue\n\n\n\nLOQ\nOptional\n\n\n\n\n\naccLab\nOptional\n\n\nNo\n\n\nphSed\nOptional\n\n\n\n\n\nTextureSedClay\nOptional\nSediment\nvalue\n\n\n\nTextureSedSilt\nOptional\nSediment\nvalue\n\n\n\nTextureSedSand\nOptional\nSediment\nvalue\n\n\n\nunitText2\nOptional\n\n\n%\n\n\nocSed\nOptional\n\n\n\n\n\nunitText3\nOptional\n\n\n\n\n\nphWater\nOptional\n\n\n\n\n\nhardWater\nOptional\n\n\n\n\n\nDOC\nOptional\n\n\n\n\n\nunitText5\nOptional\n\n\n\n\n\npublicData\nOptional\n\n\nYes\n\n\nrefPublication\nOptional\n\n\n\n\n\ncomments\nOptional"
+  },
+  {
+    "objectID": "efsa-submission.html#full-data-mapping",
+    "href": "efsa-submission.html#full-data-mapping",
+    "title": "EFSA Submission",
+    "section": "Full Data Mapping",
+    "text": "Full Data Mapping\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nColumn\nLookup\nOptionality\nSource Table\nSoruce Columns\nFixed Text\nMissing\n\n\n\n\nsampleId\n\nMandatory\nSediment\ncruise_id + core_id + sample_id\n\n\n\n\nrecId\nYes\nMandatory\n\n\n\n\n\n\nenvComp\n\nMandatory\n\n\nmarine sediment\n\n\n\npristineLoc\n\nMandatory\n\n\nYes\n\n\n\nsampleLocGC\n\nMandatory\nCore\nddn + dde\n\n\n\n\nsampleLocCM\n\nMandatory\nCore\ncountry + municipality\n\n\n\n\nsampleDate\n\nMandatory\nCruise\nstart_year + start_month + start_date\n\n\n\n\ntraceElText\n\nMandatory\nParameter\nsymbol\n\n\n\n\ntraceElCode\nYes\nMandatory\nParameter\n\n\n\n\n\nspecText\n\nMandatory\nParameter\nsymbol + ” (Total)”\n\n\n\n\nspecCode\nYes\nMandatory\n\n\n\n\n\n\nconc\n\nMandatory\nSediment\nvalue\n\n\n\n\nunitText\n\nMandatory\nParameter\nunit\n\n\n\n\nunitCode\nYes\nMandatory\n\n\n\n\n\n\nweightText\n\nMandatory\n\n\ndw\n\n\n\nweightCode\nYes\nMandatory\n\n\n\n\n\n\nmethAnText\n\nMandatory\nParameter\nmethod1\n\n\n\n\nmethAnCode\nYes\nMandatory\n\n\n\n\n\n\nLOD\n\nOptional\nLLD\nvalue\n\n\n\n\nLOQ\n\nOptional\n\n\n\nYes\n\n\naccLab\n\nOptional\n\n\nNo\n\n\n\nphSed\n\nOptional\n\n\n\nYes\n\n\nTextureSedClay\n\nOptional\nSediment\nvalue\n\n\n\n\nTextureSedSilt\n\nOptional\nSediment\nvalue\n\n\n\n\nTextureSedSand\n\nOptional\nSediment\nvalue\n\n\n\n\nunitText2\n\nOptional\n\n\n%\n\n\n\nunitCode2\nYes\nOptional\n\n\n\n\n\n\nweightText2\nYes\nOptional\n\n\n\n\n\n\nweightCode2\nYes\nOptional\n\n\n\n\n\n\nocSed\n\nOptional\n\n\n\nYes\n\n\nunitText3\n\nOptional\n\n\n\nYes\n\n\nunitCode3\nYes\nOptional\n\n\n\n\n\n\nweightText3\nYes\nOptional\n\n\n\n\n\n\nweightCode3\nYes\nOptional\n\n\n\n\n\n\nphWater\n\nOptional\n\n\n\nYes\n\n\nhardWater\n\nOptional\n\n\n\nYes\n\n\nDOC\n\nOptional\n\n\n\nYes\n\n\nunitText5\n\nOptional\n\n\n\n\n\n\nunitCode5\nYes\nOptional\n\n\n\n\n\n\npublicData\n\nOptional\n\n\nYes\n\n\n\nrefPublication\n\nOptional\n\n\n\nYes\n\n\ncomments\n\nOptional\n\n\n\nYes\n\n\nMissing recId\nYes\nOptional\n\n\n\n\n\n\nMissing envComp\nYes\nOptional\n\n\n\n\n\n\nMissing pristineLoc\nYes\nOptional\n\n\n\n\n\n\nMissing sampleLoc\nYes\nOptional\n\n\n\n\n\n\nMissing sampleDate\nYes\nOptional\n\n\n\n\n\n\nMissing traceEl\nYes\nOptional\n\n\n\n\n\n\nMissing spec\nYes\nOptional\n\n\n\n\n\n\nMissing conc\nYes\nOptional\n\n\n\n\n\n\nMissing methAn\nYes\nOptional"
+  },
+  {
+    "objectID": "efsa-submission.html#data-export-method",
+    "href": "efsa-submission.html#data-export-method",
+    "title": "EFSA Submission",
+    "section": "Data Export Method",
+    "text": "Data Export Method\nAs the EFSA submission tool is an Excel file containing embedded macros, the data must be mapped column by column rather than through a standard row‑based export. This approach ensures that the structure of the submission file is not disrupted."
+  },
+  {
+    "objectID": "pilot-db-viewer.html",
+    "href": "pilot-db-viewer.html",
+    "title": "Pilot Database Viewer",
+    "section": "",
+    "text": "This page provides a read-only view of the pilot database. Select a table from the dropdown menu below to view the data.\n\n\n\ndb = FileAttachment(\"pilot_mareano.sqlite\").sqlite()\n\n// 2. Get Table Names\ntables_query = db.query(\"SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%'\")\ntable_names = tables_query.map(row =&gt; row.name)\n\n// 3. Table Selector\nviewof selected_table = Inputs.select(table_names, {\n  label: \"Select Table:\",\n  value: table_names[0]\n})\n\n// 4. Rows Per Page Selector\nviewof pageSize = Inputs.select([10, 20, 50, 100], {\n  label: \"Rows per page:\",\n  value: 20\n})\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncount_result = db.query(`SELECT COUNT(*) as total FROM \"${selected_table}\"`)\ntotal_rows = count_result[0].total\nmax_page = Math.ceil(total_rows / pageSize)\n\n// 6. Page Slider\nviewof currentPage = Inputs.range([1, max_page], {\n  label: \"Page number:\", \n  step: 1, \n  value: 1\n})\n\n// Summary Text\nmd`**Page ${currentPage}** of ${max_page} &nbsp;*(Total rows: ${total_rows})*`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\noffset = (currentPage - 1) * pageSize\ndata_paged = db.query(`SELECT * FROM \"${selected_table}\" LIMIT ${pageSize} OFFSET ${offset}`)\n\n// 8. Display Table\nInputs.table(data_paged, {\n  layout: \"auto\",\n  rows: pageSize,\n  format: {\n    year: d3.format(\"d\"),\n    start_year: d3.format(\"d\"),\n    end_year: d3.format(\"d\")\n  }\n})"
+  },
+  {
+    "objectID": "location-names.html",
+    "href": "location-names.html",
+    "title": "Estimation of Location Names",
+    "section": "",
+    "text": "A common challenge in oceanographic datasets is missing or inconsistent location metadata. While sediment core data usually come with coordinates (latitude and longitude), fields such as the Nearest Country and the Nearest Municipality are often left blank or recorded inconsistently.\nTo ensure consistency across the dataset, we algorithmically estimated these fields based on the core’s location. This page outlines the data sources and geospatial methods used to populate the country, municipality, and sea_name columns in the Core table.\n\n\n\n\n\n\nNoteNote on Accuracy\n\n\n\nThese values are algorithmic estimates based on geometric proximity. They may differ from historical logbooks or specific political definitions of maritime borders."
+  },
+  {
+    "objectID": "location-names.html#overview",
+    "href": "location-names.html#overview",
+    "title": "Estimation of Location Names",
+    "section": "",
+    "text": "A common challenge in oceanographic datasets is missing or inconsistent location metadata. While sediment core data usually come with coordinates (latitude and longitude), fields such as the Nearest Country and the Nearest Municipality are often left blank or recorded inconsistently.\nTo ensure consistency across the dataset, we algorithmically estimated these fields based on the core’s location. This page outlines the data sources and geospatial methods used to populate the country, municipality, and sea_name columns in the Core table.\n\n\n\n\n\n\nNoteNote on Accuracy\n\n\n\nThese values are algorithmic estimates based on geometric proximity. They may differ from historical logbooks or specific political definitions of maritime borders."
+  },
+  {
+    "objectID": "location-names.html#nearest-country",
+    "href": "location-names.html#nearest-country",
+    "title": "Estimation of Location Names",
+    "section": "Nearest Country",
+    "text": "Nearest Country\nSince sediment cores are taken underwater, they do not technically belong “inside” a country’s land border. To identify the associated nation, we used a “Nearest Neighbor” analysis.\n\nConcept: For every point in the ocean, we calculated the straight-line distance to the coastlines of all surrounding nations. The country with the shortest distance was assigned to the core.\nData Source: We used the Natural Earth dataset (via the rnaturalearth R package). This provides a standardized, moderate-resolution map of global country boundaries suitable for identifying the nearest sovereign nation."
+  },
+  {
+    "objectID": "location-names.html#nearest-municipality",
+    "href": "location-names.html#nearest-municipality",
+    "title": "Estimation of Location Names",
+    "section": "Nearest Municipality",
+    "text": "Nearest Municipality\nFor higher-resolution analysis, identifying the country is not enough. We also estimated the Nearest Municipality (Local Administrative Unit) to provide granular context.\n\nConcept: Similar to the country estimation, this uses a “Nearest Neighbor” approach but requires much more detailed maps that include islands and complex coastal administrative borders.\nData Source: We utilized the Eurostat GISCO database (via the giscoR R package). This provides official administrative boundaries for European countries down to the municipal level (LAU - Local Administrative Units)."
+  },
+  {
+    "objectID": "location-names.html#sea-ocean-names",
+    "href": "location-names.html#sea-ocean-names",
+    "title": "Estimation of Location Names",
+    "section": "Sea & Ocean Names",
+    "text": "Sea & Ocean Names\nTo determine which body of water a core was taken from (e.g., “Barents Sea” vs. “Norwegian Sea”), we used the “Point-in-Polygon” method.\n\nConcept: Imagine drawing official boundaries on a map. We simply check which boundary “box” each sediment core falls inside.\nData Source: We utilized the International Hydrographic Organization (IHO) Sea Areas v3. This is the globally accepted standard for defining the limits of oceans and seas.\nMethod: The specific boundaries were downloaded directly from the Marine Regions estimation service. If a core was located slightly “inland” due to map resolution issues (common in narrow fjords), it was assigned to the nearest adjacent sea body."
+  },
+  {
+    "objectID": "location-names.html#summary-of-data-sources",
+    "href": "location-names.html#summary-of-data-sources",
+    "title": "Estimation of Location Names",
+    "section": "Summary of Data Sources",
+    "text": "Summary of Data Sources\n\n\n\n\n\n\n\n\n\nField\nEstimation Method\nData Source\nR Package / Tool\n\n\n\n\nNearest Country\nNearest Neighbor\nNatural Earth\nrnaturalearth\n\n\nMunicipality\nNearest Neighbor\nEurostat GISCO\ngiscoR\n\n\nSea Name\nSpatial Join\nIHO Sea Areas v3\nsf (Direct WFS)"
+  }
+]
