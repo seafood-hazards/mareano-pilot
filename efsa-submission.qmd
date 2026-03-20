@@ -1,0 +1,93 @@
+---
+title: "EFSA Submission"
+subtitle: "Data export of trace elements for EFDA submission"
+---
+
+The page presents the data export of trace elements in background sediments from the pilot database.
+
+```{r}
+library(tidyverse)
+
+efsa_submission <- tribble(
+  ~Column,            ~`Lookup`, ~Optionality, ~Table,     ~`Column Names`,                      ~`Fixed Text`, ~Missing,
+  "sampleId",         NA,              "Mandatory",  "Sediment", "cruise_id + core_id + sample_id", NA,          NA,
+  "recId",            "Yes",           "Mandatory",  NA,         NA,                                NA,          NA,
+  "envComp",          NA,              "Mandatory",  NA,         NA,                                "marine sediment", NA,
+  "pristineLoc",      NA,              "Mandatory",  NA,     NA,                        "Yes",          NA,
+  "sampleLocGC",      NA,              "Mandatory",  "Core",     "ddn + dde",                       NA,          NA,
+  "sampleLocCM",      NA,              "Mandatory",  "Core",     "country + municipality",                        NA,          NA,
+  "sampleDate",       NA,              "Mandatory",  "Cruise",   "start_year + start_month + start_date",             NA,          NA,
+  "traceElText",      NA,           "Mandatory",  "Parameter","symbol",                          NA,          NA,
+  "traceElCode",      "Yes",              "Mandatory",  "Parameter",NA,                                NA,          NA,
+  "specText",         NA,           "Mandatory",  "Parameter", 'symbol + " (Total)"',                      NA,          NA,
+  "specCode",         "Yes",              "Mandatory",  NA,         NA,                                NA,          NA,
+  "conc",             NA,              "Mandatory",  "Sediment", "value",                           NA,          NA,
+  "unitText",         NA,           "Mandatory",  "Parameter","unit",                            NA,          NA,
+  "unitCode",         "Yes",              "Mandatory",  NA,         NA,                                NA,          NA,
+  "weightText",       NA,           "Mandatory",  NA,         NA,                                "dw",         NA,
+  "weightCode",       "Yes",              "Mandatory",  NA,         NA,                                NA,          NA,
+  "methAnText",       NA,           "Mandatory",  "Parameter","method1",                         NA,          NA,
+  "methAnCode",       "Yes",              "Mandatory",  NA,         NA,                                NA,          NA,
+  "LOD",              NA,              "Optional",   "LLD",         "value",                    NA,          NA,
+  "LOQ",              NA,              "Optional",   NA,         NA,                                NA,          "Yes",
+  "accLab",           NA,              "Optional",   NA,         NA,                                "No",         NA,
+  "phSed",            NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "TextureSedClay",   NA,              "Optional",   "Sediment", "value",                           NA,          NA,
+  "TextureSedSilt",   NA,              "Optional",   "Sediment", "value",                           NA,          NA,
+  "TextureSedSand",   NA,              "Optional",   "Sediment", "value",                           NA,          NA,
+  "unitText2",        NA,           "Optional",   NA,         NA,                                "%",          NA,
+  "unitCode2",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "weightText2",      "Yes",           "Optional",   NA,         NA,                                NA,          NA,
+  "weightCode2",      "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "ocSed",            NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "unitText3",        NA,           "Optional",   NA,         NA,                                NA,          "Yes",
+  "unitCode3",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "weightText3",      "Yes",           "Optional",   NA,         NA,                                NA,          NA,
+  "weightCode3",      "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "phWater",          NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "hardWater",        NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "DOC",              NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "unitText5",        NA,           "Optional",   NA,         NA,                                NA,          NA,
+  "unitCode5",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "publicData",       NA,              "Optional",   NA,         NA,                                "Yes",        NA,
+  "refPublication",   NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "comments",         NA,              "Optional",   NA,         NA,                                NA,        "Yes",
+  "Missing recId",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing envComp",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing pristineLoc",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing sampleLoc",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing sampleDate",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing traceEl",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing spec",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing conc",        "Yes",              "Optional",   NA,         NA,                                NA,          NA,
+  "Missing methAn",        "Yes",              "Optional",   NA,         NA,                                NA,          NA
+)
+
+efsa_submission_full <- efsa_submission %>%
+  mutate(
+    across(
+      where(is.character),
+      ~replace_na(.x, "")
+    )
+  ) %>%
+  rename(c(`Source Table` = "Table", 
+           `Soruce Columns` = "Column Names"))
+
+efsa_submission <- efsa_submission_full %>%
+  filter(Lookup != "Yes") %>%
+  dplyr::select(-c(Lookup, Missing))
+
+```
+
+## Data Mapping for Submission
+```{r}
+efsa_submission
+```
+
+## Full Data Mapping
+```{r}
+efsa_submission_full
+```
+
+## Data Export Method
+As the EFSA submission tool is an Excel file containing embedded macros, the data must be mapped column by column rather than through a standard row‑based export. This approach ensures that the structure of the submission file is not disrupted.

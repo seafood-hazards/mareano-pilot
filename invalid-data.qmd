@@ -1,0 +1,143 @@
+---
+title: "Invalid Data"
+subtitle: "Correction of invalid data in the original Mareano dataset"
+---
+
+The page presents the invalid data identified during the database creation process. Because the database enforces stringent constraints on the data structure, the data must be corrected before it can be imported into the database tables.
+
+```{r}
+library(tibble)
+library(dplyr)
+library(knitr)
+
+invalid_full_ids_examples <- tribble(
+  ~`Full ID (icorrect format)`,                    ~`Expected ID`,                 ~`Year`, ~`Number`, ~`Tool`, ~`ID`, ~Issue,
+  "2008104R0243GR037c0_Gr-243", "2008104R0243GR037c0_00-01", 2008,           "104",            "GR",             "037",                      "Format incorrect (used 'Gr-243' instead of depth interval)",
+  "2009111R0447BC481c0_00-01",  "2009105R0447BC481c0_00-01", 2009,           "105",            "BC",             "481",                      "Wrong cruise number",
+  "2011113R0749MC020c3_03-04",  "2011113R0749MC020c0_03-04", 2011,           "113",            "MC",             "020",                      "Used core ID (c3) instead of base (c0)",
+  "2020104R2139MC008c1_14-15",  "2020104R2139MC008c1_15-16", 2020,           "104",            "MC",             "8",                        "Incorrect core layer interval"
+)
+
+sample_sediment_corrections <- tribble(
+  ~`Full ID`,                        ~Action,   ~`Old from`, ~`Old to`, ~`New from`, ~`New to`, ~Comment,
+  "2021P2009010_0-2",              "delete",  NA,        NA,  NA,        NA,      "Duplicate entry",
+  "2021P2009012_0-2",              "delete",  NA,        NA,  NA,        NA,      "Duplicate entry",
+  "2021P2009015_0-2",              "delete",  NA,        NA,  NA,        NA,      "Duplicate entry",
+  "2021104R2669MC15c1_9-10",       "fix",  8,        9,     9,         10,      "Correct interval (from/to)",
+  "2021115R2770MC17c1_9-10",       "fix",  8,        9,     9,         10,      "Correct interval (from/to)",
+  "2021115R2869MC19c1_9-10",       "fix",  8,        9,     9,         10,      "Correct interval (from/to)"
+)
+
+element_additions <- tribble(
+  ~Parameter, ~Element, ~Method1,              ~Method2,              ~Institute,
+  "S_p",      "Sulfur", NA_character_,         NA_character_,         "NGU-Laboratory"
+)
+
+cruise_correction_rules <- tribble(
+  ~`Cruise No`, ~Action,   ~Reason,
+  "26",        "delete",  "Duplicate cruise"
+)
+
+df_missing_batch_ids <- tibble::tribble(
+  ~`Cruise ID`,     ~`Batch ID`,
+  "MA-2007-105",  "2008.0009",
+  "MA-2007-111",  "2008.0009",
+  "MA-2009-105",  "2010.021",
+  "MA-2009-111",  "2010.021",
+  "MA-2010-110",  "2011.003",
+  "MA-2010-112",  "2011.003",
+  "MA-2020-2002", "2020.0118",
+  "MA-2021-2005", "2020.0161",
+  "MA-2021-2102", "2021.211"
+)
+
+```
+
+## Invalid Full IDs
+
+::: {.callout-warning}
+Several Full IDs were generated with incorrect formats, wrong cruise numbers, or invalid core identifiers. These must be corrected before import.
+:::
+
+  * **Excel Sheet**: `INORGANIC`
+  * **Range**: Column A
+  
+More than 100 Full IDs were incorrectly generated in the source data. Below are **representative examples** with the corrected values and a short explanation.
+
+```{r}
+invalid_full_ids_examples %>%
+  kable(caption = "Examples of invalid Full IDs and their corrections.")
+```
+
+
+## Sample and Sediment
+
+::: {.callout-warning}
+The dataset contains duplicate sample rows and several depth intervals that do not match expected layer boundaries. These issues require deletion or interval correction.
+:::
+
+  * **Excel Sheet**: `INORGANIC`
+  * **Ranges for duplication**: 
+     * 2021P2009010_0-2: A3312:K3312 & A3319:K3319
+     * 2021P2009012_0-2: A3313:K3313 & A3328:K3328
+     * 2021P2009015_0-2: A3315:K3315 & A3337:K3337
+  * **Ranges for invalid depth intervals**: 
+     * 2021104R2669MC15c1_9-10: A3487:K3487
+     * 2021115R2770MC17c1_9-10: A3509:K3509
+     * 2021115R2869MC19c1_9-10: A3532:K3532
+
+The following **rule table** drives deletions of duplicate rows and corrections of invalid depth intervals. These rules are applied during the data standardization step.
+
+```{r}
+sample_sediment_corrections %>%
+  kable(caption = "Rules applied to Sample and Sediment data.")
+```
+
+## Cruise Information
+
+::: {.callout-warning}
+A duplicated cruise entry appears in the metadata and must be removed to maintain unique cruise identifiers.
+:::
+
+  * **Excel Sheet**: `INFO`
+  * **Range**: P83:V83
+
+The rule below removes a known duplicate entry from the cruise metadata.
+
+```{r}
+cruise_correction_rules %>%
+  kable(caption = "Rule applied to cruise metadata.")
+```
+
+
+## Element Definitions
+
+::: {.callout-warning}
+The element list is missing a required Sulfur entry, which must be added for completeness.
+:::
+
+  * **Excel Sheet**: `INFO`
+  * **Range**: A141:G141
+
+A missing Sulfur row is **added** to ensure completeness of element definitions.
+
+```{r}
+element_additions %>%
+  kable(caption = "Element definition additions.")
+```
+
+## Sample Batch IDs
+
+::: {.callout-warning}
+Sample batch IDs are required to look up lower limits of detection (LLD), but many are missing in the LLD table. This issue is particularly common for samples collected during the Mareano cruise in 2021, where several entries lack proper batch IDs.
+:::
+
+  * **Excel Sheets**: `INFO` & `INORGANIC`
+  * **Ranges**: H91:AF141 in `INFO` & Column O in `INORGANIC`
+
+The table below lists sample batch IDs that have no associated LLD values. It also includes a few samples from the Mareano 2021 cruise that do have valid batch IDs but still lack corresponding LLD entries.
+
+```{r}
+df_missing_batch_ids %>%
+  kable(caption = "Batch IDs without associated LLD.")
+```

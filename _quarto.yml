@@ -1,0 +1,51 @@
+project:
+  type: website
+
+website:
+  title: "Mareano Pilot"
+  navbar:
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "DB Design"
+        menu:
+          - text: "DB Schema"
+            href: db-schema.qmd
+          - text: "Invalid Data"
+            href: invalid-data.qmd
+      - text: "Geospatial Analysis"
+        menu:
+          - text: "Distance to Coast"
+            href: distance-to-coast.qmd
+          - text: "Location Names"
+            href: location-names.qmd
+          - text: "Interactive Map"
+            href: distance-interactive-map.qmd
+      - text: "Data Export"
+        menu:
+          - text: "Export to Tabular File"
+            href: data-export.qmd
+          - text: "EFSA Format"
+            href: efsa-format.qmd
+          - text: "EFSA Submission"
+            href: efsa-submission.qmd
+      - text: "Tools"
+        menu:
+          - text: "Pilot DB Viewer"
+            href: pilot-db-viewer.qmd
+
+format:
+  html:
+    include-in-header: header.html
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+    df-print: kable
+
+execute:
+  echo: false
+  warning: false
+  message: false
