@@ -1,6 +1,6 @@
 ---
 title: "Mareano Pilot Database"
-subtitle: "A pilot study to evaluate the database structure using Mareano chemical data"
+subtitle: "A pilot study to evaluate the database structure using the Mareano chemical data"
 ---
 
 This site presents the initial version of the database design and its potential applications using the publicly available [Mareano](https://www.mareano.no/) dataset.

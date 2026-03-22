@@ -1,6 +1,6 @@
 ---
 title: "Data Export"
-subtitle: A dataset file exported from the pilot DB
+subtitle: A dataset file exported from the pilot database
 ---
 
 The data file was created for the initial analysis using the Mareano data. 
