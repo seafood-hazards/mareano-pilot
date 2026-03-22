@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-03-22
+### Fixed
+- DOI link
+
 ## [0.1.0] - 2026-03-21
 ### Added
 - All Quarto files from pilot-db-mareano
