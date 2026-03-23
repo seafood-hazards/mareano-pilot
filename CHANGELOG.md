@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-03-23
+### Added
+- DT library for interactive tables
+
 ## [0.1.2] - 2026-03-23
 ### Added
 - Sediment core count table
