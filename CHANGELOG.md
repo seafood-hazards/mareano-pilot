@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-03-23
+### Fixed
+- DT table format in the landing page
+
 ## [0.1.3] - 2026-03-23
 ### Added
 - DT library for interactive tables
