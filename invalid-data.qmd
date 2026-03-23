@@ -28,6 +28,11 @@ sample_sediment_corrections <- tribble(
   "2021115R2869MC19c1_9-10",       "fix",  8,        9,     9,         10,      "Correct interval (from/to)"
 )
 
+element_corrections <- tribble(
+  ~Parameter, ~Action,   ~`Old Element`, ~`New Element`,
+  "Cd_p",     "fix",     "Calcium",      "Cadmium"
+)
+
 element_additions <- tribble(
   ~Parameter, ~Element, ~Method1,              ~Method2,              ~Institute,
   "S_p",      "Sulfur", NA_character_,         NA_character_,         "NGU-Laboratory"
@@ -111,6 +116,22 @@ cruise_correction_rules %>%
 
 
 ## Element Definitions
+
+::: {.callout-warning}
+An incorrect element name appear in the element list and must be corrected.
+:::
+
+
+  * **Excel Sheet**: `INFO`
+  * **Range**: A125:B125
+
+The incorrect element entry for ``Cd_p`` is corrected to from ``Calcium`` and ``Cadmium``.
+
+```{r}
+element_corrections %>%
+  kable(caption = "Element definition corrections")
+```
+
 
 ::: {.callout-warning}
 The element list is missing a required Sulfur entry, which must be added for completeness.

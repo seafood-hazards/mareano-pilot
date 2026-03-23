@@ -28,7 +28,7 @@ library(tidyverse)
 library(DT)
 
 # 1. Define the URL for the data file
-data_file_url <- "https://github.com/seafood-hazards/pilot-db-with-mareano/releases/download/v0.1.13/pilot_mareano.tsv.gz"
+data_file_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.4/pilot_mareano.tsv.gz"
 local_data_file_name <- "pilot_mareano.tsv.gz"
 
 # 2. Download Logic
