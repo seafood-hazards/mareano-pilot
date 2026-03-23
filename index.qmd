@@ -46,10 +46,11 @@ df_counts <- df_mariano_sediment %>%
   count(cruise_type, year, element) %>%
   pivot_wider(names_from = element, values_from = n) %>%
   replace(is.na(.), 0) %>%
+  mutate(cruise_type = factor(cruise_type)) %>% 
   rename(`Cruise Type` = cruise_type,
          Year = year)
 
-datatable(df_counts, filter = "top", rownames = FALSE)
+datatable(df_counts, filter = "top", rownames = FALSE, class = "nowrap", options = list(scrollX = TRUE))
 
 ```
 
