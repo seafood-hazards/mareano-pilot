@@ -29,7 +29,7 @@ table {
 #| output: false
 
 # 1. Define the URL for the SQLite file
-db_url <- "https://github.com/seafood-hazards/pilot-db-with-mareano/releases/download/v0.1.14/pilot_mareano.sqlite"
+db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.4/pilot_mareano.sqlite"
 local_db_name <- "pilot_mareano.sqlite"
 
 # 2. Download Logic
