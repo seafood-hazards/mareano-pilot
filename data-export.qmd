@@ -47,7 +47,10 @@ exported_columns_tbl <- tibble(
     "element", "parameter", "value", "is_lld",
     
     # LLD
-    "lld"
+    "lld",
+
+    # Category
+    "category"
   ),
   `Source Table` = c(
     "Cruise / Core / Sample", "Core / Sample", "Sample",
@@ -55,7 +58,7 @@ exported_columns_tbl <- tibble(
     "Core", "Core", "Core", "Core", "Core", "Core",
     "Sediment (Pivoted)", "Sediment (Pivoted)", "Sediment (Pivoted)", "Sediment (Pivoted)",
     "Sample", "Sample",
-    "Parameter", "Parameter / Sediment", "Sediment", "Sediment", "LLD"
+    "Parameter", "Parameter / Sediment", "Sediment", "Sediment", "LLD", "Parameter (Categorized)"
   ),
   `Description` = c(
     "Unique Cruise Identifier", "Unique Core Identifier", "Unique Sample Identifier",
@@ -64,7 +67,8 @@ exported_columns_tbl <- tibble(
     "Clay fraction (%)", "Silt fraction (%)", "Sand fraction (%)", "Gravel fraction (%)",
     "Top depth of sample interval (cm)", "Bottom depth of sample interval (cm)",
     "Chemical element name", "Specific parameter measured (element name + method)", "Measured value", "Flag: 1 if value is Lower Level Detection (LLD)",
-    "Lower limits of detection (LLD) value"
+    "Lower limits of detection (LLD) value",
+    "efsa: EFSA elements, other: Other elements, tcs: Total sulfur and carbon"
   )
 )
 
