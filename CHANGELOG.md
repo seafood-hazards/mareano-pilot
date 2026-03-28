@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-03-28
+### Added
+- Category column to the export data
+
 ## [0.1.4] - 2026-03-23
 ### Fixed
 - DT table format in the landing page
