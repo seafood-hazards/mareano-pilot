@@ -72,3 +72,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
+
+<!-- stratum-sqlite initialisation
+     Detects the page depth from Quarto's site_libs/ script so this works
+     for pages at any subdirectory level without hardcoding paths. -->
+<script>
+(function () {
+  var siteLibScript = document.querySelector('script[src*="site_libs/"]');
+  var root = siteLibScript
+    ? siteLibScript.getAttribute('src').replace(/site_libs\/.*$/, '')
+    : '';
+
+  window._sqljsBase = root + 'libs/sqljs/';
+  window._dbPath    = root + 'pilot_mareano.sqlite';
+
+  // import() requires an absolute URL — a bare relative path like
+  // "libs/sqljs/stratum-sqlite.esm.js" throws "bare specifier" error.
+  // new URL() resolves the relative path against the current page URL,
+  // producing a full absolute https:// URL that import() accepts.
+  var esmUrl = new URL(window._sqljsBase + 'stratum-sqlite.esm.js',
+                       window.location.href).href;
+
+  window._stratumSQLite = import(esmUrl)
+    .then(function (m) { return m.default; });
+}());
+</script>
