@@ -27,19 +27,8 @@ The table below summarizes the number of sediment cores collected across 39 para
 library(tidyverse)
 library(DT)
 
-# 1. Define the URL for the data file
-data_file_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.4/pilot_mareano.tsv.gz"
+# Read data file
 local_data_file_name <- "pilot_mareano.tsv.gz"
-
-# 2. Download Logic
-if (!file.exists(local_data_file_name)) {
-  options(timeout = 600)
-  download.file(data_file_url, destfile = local_data_file_name, mode = "wb")
-  message("Database downloaded.")
-} else {
-  message("Using existing local database.")
-}
-
 df_mariano_sediment <- read_tsv(local_data_file_name)
 df_counts <- df_mariano_sediment %>%
   distinct(cruise_type, year, core_id, element) %>%

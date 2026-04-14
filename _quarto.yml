@@ -1,5 +1,13 @@
 project:
   type: website
+  pre-render: download_resources.R
+  resources:
+    - pilot_mareano.sqlite
+    - pilot_mareano.tsv.tsv.gz
+    - libs/sqljs/
+  render:
+    - "*.qmd"
+    - "!CHANGELOG.md"
 
 website:
   title: "Mareano Pilot"

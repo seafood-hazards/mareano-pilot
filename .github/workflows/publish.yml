@@ -2,19 +2,24 @@ name: Publish Quarto Website
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write # To avoid "organization" repository restrictions
+  contents: read
+  pages:    write
+  id-token: write
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url:  ${{ steps.deploy.outputs.page_url }}
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -38,7 +43,8 @@ jobs:
             libcurl4-openssl-dev \
             libnode-dev \
             libharfbuzz-dev \
-            libfribidi-dev
+            libfribidi-dev \
+            gdal-bin
 
       - name: Restore renv packages
         uses: r-lib/actions/setup-renv@v2
@@ -48,9 +54,15 @@ jobs:
       - name: Render site
         run: quarto render
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      # Prevent Jekyll from mangling .wasm and other binary files
+      - name: Add .nojekyll
+        run: touch _site/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: _site        # The folder Quarto generated
-          branch: gh-pages     # The branch to deploy to
-          single-commit: true  # This wipes history to prevent bloat
+          path: _site/
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
