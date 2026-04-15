@@ -1,0 +1,300 @@
+---
+title: "Sediment Trace Element Map"
+format:
+  html:
+    page-layout: full
+---
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+.map-container { height: 500px; width: 100%; }
+#map            { height: 100%; width: 100%; border-radius: 6px; }
+
+/* Legend */
+.legend {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+  line-height: 1.6;
+  font-size: 13px;
+}
+.legend-title { font-weight: bold; margin-bottom: 4px; }
+.legend-bar {
+  width: 160px; height: 12px;
+  background: linear-gradient(to right, #ffffb2, #fecc5c, #fd8d3c, #f03b20, #bd0026);
+  border-radius: 2px;
+  margin: 4px 0;
+}
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #555;
+}
+
+/* Home button */
+.leaflet-home-button {
+  background: white;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-radius: 4px;
+  width: 26px; height: 26px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  display: block;
+  color: #444;
+  text-decoration: none;
+}
+.leaflet-home-button:hover { background: #f4f4f4; }
+</style>
+```
+
+```{ojs}
+//| output: false
+
+db = {
+  const StratumSQLite = await window._stratumSQLite;
+  return StratumSQLite.open(window._dbPath, {
+    sqlJsPath: window._sqljsBase,
+    cacheKey:  "pilot-mareano@v0.1.4",
+  });
+}
+
+L = require("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")
+
+home_lat = 68
+home_lng = 15
+home_zoom = 4
+
+elements = [
+  { label: "Cobalt (Co)",      value: "Co" },
+  { label: "Copper (Cu)",      value: "Cu" },
+  { label: "Manganese (Mn)",   value: "Mn" },
+  { label: "Molybdenum (Mo)",  value: "Mo" },
+  { label: "Selenium (Se)",    value: "Se" },
+  { label: "Zinc (Zn)",        value: "Zn" }
+]
+```
+
+```{ojs}
+//| output: false
+mutable clicked_point = null
+```
+
+```{ojs}
+//| panel: sidebar
+
+viewof selected_element = Inputs.select(elements, {
+  label: "Element:",
+  format: d => d.label,
+  value: elements[0]
+})
+
+year_range_result = db.query(`
+  SELECT MIN(c1.year) AS min_year, MAX(c1.year) AS max_year
+  FROM sediment s
+  JOIN cruise c1 ON c1.cruise_id = s.cruise_id
+  JOIN parameter p ON p.parameter = s.parameter
+  WHERE p.symbol = '${selected_element.value}'
+`)
+
+min_year = year_range_result[0].min_year ?? 2003
+max_year = year_range_result[0].max_year ?? 2022
+
+viewof year_start = Inputs.range(
+  [min_year, max_year],
+  { label: "Year from:", step: 1, value: min_year }
+)
+
+viewof year_end = Inputs.range(
+  [min_year, max_year],
+  { label: "Year to:", step: 1, value: max_year }
+)
+```
+
+```{ojs}
+//| panel: fill
+
+// --- Value range query (for legend and colour scale) ---
+value_range_result = db.query(`
+  SELECT symbol AS param,
+         MIN(avg_value) AS min_avg_value,
+         MAX(avg_value) AS max_avg_value
+  FROM (SELECT p.symbol,
+               AVG(s.value) AS avg_value
+        FROM sediment s
+                 JOIN cruise c1 ON c1.cruise_id = s.cruise_id
+                 JOIN core c2 ON c2.cruise_id = s.cruise_id and c2.core_id = s.core_id
+                 JOIN sample s1
+                      ON s1.sample_id = s.sample_id and s1.cruise_id = s.cruise_id and s1.core_id = s.core_id
+                 JOIN parameter p ON p.parameter = s.parameter
+        WHERE p.symbol = '${selected_element.value}'
+          AND c1.year BETWEEN ${year_start} AND ${year_end}
+        GROUP BY p.symbol, c2.dde, c2.ddn) t
+  GROUP BY symbol
+`)
+
+value_min = value_range_result[0]?.min_avg_value ?? 0
+value_max = value_range_result[0]?.max_avg_value ?? 1
+
+// --- Map data query ---
+map_data = db.query(`
+  SELECT c2.dde AS longitude,
+         c2.ddn AS latitude,
+         AVG(s.value) AS avg_value
+  FROM sediment s
+           JOIN cruise c1 ON c1.cruise_id = s.cruise_id
+           JOIN core c2 ON c2.cruise_id = s.cruise_id and c2.core_id = s.core_id
+           JOIN sample s1
+                ON s1.sample_id = s.sample_id and s1.cruise_id = s.cruise_id and s1.core_id = s.core_id
+           JOIN parameter p ON p.parameter = s.parameter
+  WHERE p.symbol = '${selected_element.value}'
+    AND c1.year BETWEEN ${year_start} AND ${year_end}
+  GROUP BY p.symbol, c2.dde, c2.ddn
+`)
+
+// --- Colour scale using element+year-specific range ---
+colorScale = d3.scaleSequential()
+  .domain([value_min, value_max])
+  .interpolator(d3.interpolateYlOrRd)
+
+function markerColor(v) {
+  return v == null ? "#aaa" : colorScale(v)
+}
+
+function fmtVal(v) {
+  return v == null ? "N/A" : v.toFixed(0) + " mg/kg"
+}
+
+// --- Render / update map ---
+{
+  const container = html`<div class="map-container"><div id="map"></div></div>`
+  yield container
+
+  if (!container._map) {
+    const map = L.map(container.querySelector("#map"), { zoomControl: true })
+      .setView([home_lat, home_lng], home_zoom)
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors"
+    }).addTo(map)
+
+    // --- Home button (added below the zoom control) ---
+    const HomeControl = L.Control.extend({
+      options: { position: "topleft" },
+      onAdd(map) {
+        const btn = L.DomUtil.create("a", "leaflet-home-button")
+        btn.innerHTML = "⌂"
+        btn.title = "Reset view"
+        L.DomEvent.on(btn, "click", (e) => {
+          L.DomEvent.stopPropagation(e)
+          map.setView([home_lat, home_lng], home_zoom)
+        })
+        return btn
+      }
+    })
+    new HomeControl().addTo(map)
+
+    // --- Legend ---
+    const LegendControl = L.Control.extend({
+      options: { position: "bottomright" },
+      onAdd() {
+        const div = L.DomUtil.create("div", "legend")
+        div.id = "map-legend"
+        return div
+      }
+    })
+    new LegendControl().addTo(map)
+
+    container._map     = map
+    container._markers = L.layerGroup().addTo(map)
+  }
+
+  const { _map: map, _markers: markers } = container
+
+  // Update legend content whenever element or year range changes
+  const legendEl = map.getContainer().querySelector("#map-legend")
+  if (legendEl) {
+    legendEl.innerHTML = `
+      <div class="legend-title">${selected_element.label}</div>
+      <div style="font-size:11px;color:#555">Avg (µg/kg) · ${year_start}–${year_end}</div>
+      <div class="legend-bar"></div>
+      <div class="legend-labels">
+        <span>${fmtVal(value_min)}</span> &nbsp;
+        <span>${fmtVal((value_min + value_max) / 2)}</span> &nbsp;
+        <span>${fmtVal(value_max)}</span>
+      </div>
+    `
+  }
+
+  markers.clearLayers()
+  mutable clicked_point = null
+
+  for (const d of map_data) {
+    if (d.avg_value == null) continue
+    const circle = L.circleMarker([d.latitude, d.longitude], {
+      radius:      7,
+      fillColor:   markerColor(d.avg_value),
+      color:       "#333",
+      weight:      0.8,
+      opacity:     1,
+      fillOpacity: 0.85
+    })
+    circle.bindTooltip(
+      `<b>${selected_element.label}</b><br>
+       Avg: ${fmtVal(d.avg_value)}<br>
+       (${year_start}–${year_end})`,
+      { sticky: true }
+    )
+    circle.on("click", () => {
+      mutable clicked_point = { lon: d.longitude, lat: d.latitude }
+    })
+    markers.addLayer(circle)
+  }
+}
+
+map_data.length === 0
+  ? md`*No data found for this selection.*`
+  : md`**${selected_element.label}** · ${year_start}–${year_end} · **${map_data.length}** locations · values in µg/kg`
+```
+
+```{ojs}
+// --- Detail table on click ---
+
+point_data = {
+  const p = clicked_point
+  if (!p) return []
+  return db.query(`
+    SELECT c1.cruise_type AS 'Cruise Type',
+           CAST(c1.year AS TEXT) AS Year,
+           c2.sampling_tool AS 'Tool',
+           c2.dde AS Longitude,
+           c2.ddn AS Latitude,
+           s1.depth_from AS 'From',
+           s1.depth_to AS 'To',
+           p.parameter as Parameter,
+           p.element as Element,
+           p.symbol as Symbol,
+           s.value AS Value,
+           p.unit AS Unit
+    FROM sediment s
+             JOIN cruise c1 ON c1.cruise_id = s.cruise_id
+             JOIN core c2 ON c2.cruise_id = s.cruise_id and c2.core_id = s.core_id
+             JOIN sample s1
+                  ON s1.sample_id = s.sample_id and s1.cruise_id = s.cruise_id and s1.core_id = s.core_id
+             JOIN parameter p ON p.parameter = s.parameter
+    WHERE p.symbol = '${selected_element.value}'
+      AND c1.year BETWEEN ${year_start} AND ${year_end} AND c2.dde = ${p.lon} AND c2.ddn = ${p.lat}
+  `)
+}
+
+clicked_point
+  ? md`### Measurements at (${clicked_point.lat.toFixed(2)}, ${clicked_point.lon.toFixed(2)})`
+  : md`*Click a point on the map to see its measurements.*`
+
+// Return an empty html element instead of null to avoid OJS printing "null"
+clicked_point ? Inputs.table(point_data, { layout: "auto" }) : html`<span></span>`
+```
