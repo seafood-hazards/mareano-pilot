@@ -69,3 +69,4 @@ Data can be exported for both exploration and submission.
 ## Tools
 
 - See the [Pilot DB Viewer](./pilot-db-viewer.qmd) page for a read-only view of the pilot database.
+- See the [Sediment Trace Element Map](./sediment-map.qmd) page for an interactive map view of the trace elements.
