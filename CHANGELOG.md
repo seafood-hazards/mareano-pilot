@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-04-16
+### Changed
+- data source for interactive site map
+
 ## [0.1.8] - 2026-04-15
 ### Added
 - Interactive sediment map
