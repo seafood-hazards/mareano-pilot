@@ -1,7 +1,7 @@
 options(timeout = 600)
 
 # ── TSV data ───────────────────────────────────────────────────────────────
-data_file_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.4/pilot_mareano.tsv.gz"
+data_file_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.7/pilot_mareano.tsv.gz"
 local_data_file_name <- "pilot_mareano.tsv.gz"
 if (!file.exists(local_data_file_name)) {
   download.file(data_file_url, destfile = local_data_file_name, mode = "wb")
@@ -11,7 +11,7 @@ if (!file.exists(local_data_file_name)) {
 }
 
 # ── SQLite database ────────────────────────────────────────────────────────
-db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.4/pilot_mareano.sqlite"
+db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.7/pilot_mareano.sqlite"
 local_db_file_name <- "pilot_mareano.sqlite"
 if (!file.exists(local_db_file_name)) {
   download.file(db_url, local_db_file_name, mode = "wb")
