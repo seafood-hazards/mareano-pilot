@@ -1,12 +1,12 @@
 ---
-title: "Interactive Map of Core Locations"
-subtitle: Interactive map to view sediment core locations with meta information
+title: "Interactive Map of Site Locations"
+subtitle: Interactive map to view sediment site locations with meta information
 ---
 
 ::: {.callout-note}
 ## Note on Distance Accuracy
 
-Calculated distances represent the shortest Euclidean path to the nearest coastline geometry (GSHHG dataset). 
+Calculated distances represent the shortest Euclidean path to the nearest coastline geometry (GSHHG dataset).
 
 While the data is projected (EPSG:3035) to minimize distortion at high latitudes, please interpret these values as **estimates**. In areas with complex topography—such as narrow fjords or dense archipelagos—the resolution of the coastline vector data may result in minor deviations from real-world measurements.
 :::
@@ -23,82 +23,211 @@ The map below displays the spatial distribution of sediment cores. The markers a
 **How to use this map:**
 
 *   **Zoom and Pan** to explore specific coastal areas or offshore regions.
-*   **Click the Globe icon <i class="fas fa-earth-europe"></i> ** to reset the view.
+*   **Click the Expand icon <i class="fas fa-expand"></i>** to reset the view.
 *   **Filter** the data by toggling distance categories in the top-right menu (e.g., uncheck boxes to hide specific ranges).
 *   Use the **Legend** in the bottom right to interpret the color coding.
-*   **Hover** over a point to quickly identify the **Cruise ID** and **Core ID**.
+*   **Hover** over a point to quickly identify the **Cruise** and **Core** IDs.
 *   **Click** on a marker to view exact coordinates, distance to shore (in km), and location names.
 
-```{r}
-#| column: page       
-#| fig-height: 7
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+#site-map { height: 600px; width: 100%; border-radius: 6px; }
 
-library(leaflet)
-library(viridis)
-library(dplyr)
-library(sf)
+/* Layer control */
+.leaflet-control-layers-list { font-size: 13px; }
 
-# 1. Load Data
-points_web <- readRDS(".data/points_web.Rds")
-
-# 2. Define Default View 
-home_lat <- 68
-home_lng <- 15
-home_zoom <- 4
-
-# 3. Create Palette
-pal <- colorFactor(palette = "turbo", domain = points_web$Distance)
-
-# 4. Initialize Map
-map <- leaflet(points_web) %>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
-  setView(lng = home_lng, lat = home_lat, zoom = home_zoom)
-
-# 5. Add Points 
-dist_groups <- rev(levels(points_web$Distance))
-
-for(group in dist_groups) {
-  data_subset <- points_web[points_web$Distance == group, ]
-  map <- map %>%
-    addCircleMarkers(
-      data = data_subset,
-      group = group,
-      radius = 6,
-      color = ~pal(group),
-      fillColor = ~pal(group),
-      fillOpacity = 0.7,
-      weight = 1,
-      label = ~paste0("Cruise: ", cruise_id, ", Core: ", core_id),
-      popup = ~paste0(
-        "<strong>Cruise ID:</strong> ", cruise_id, "<br>",
-        "<strong>Core ID:</strong> ", core_id, "<br>",
-        "<strong>Longitude:</strong> ", round(dde, 2), "<br>",
-        "<strong>Latitude:</strong> ", round(ddn, 2), "<br>",
-        "<strong>Distance to Coast:</strong> ", round(dist_to_coast, 1), " km", "<br>",
-        "<strong>Country:</strong> ", country, "<br>",
-        "<strong>Municipality:</strong> ", municipality, "<br>",
-        "<strong>Sea/Ocean Name:</strong> ", sea_name
-      )
-    )
+/* Legend */
+.site-legend {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.site-legend-title { font-weight: bold; margin-bottom: 4px; }
+.legend-dot {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.25);
 }
 
-# 6. Add Controls & The Home Button
-map %>%
-  addLayersControl(
-    overlayGroups = dist_groups,
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  addLegend(
-    position = "bottomright",
-    pal = pal,
-    values = ~Distance,
-    title = "Distance to Coast",
-    opacity = 1
-  ) %>%
-  addEasyButton(easyButton(
-    icon = "fa-earth-europe",
-    title = "Reset View",
-    onClick = JS(paste0("function(btn, map){ map.setView([", home_lat, ",", home_lng, "], ", home_zoom, "); }"))
-  ))
+/* Home / reset button */
+.leaflet-home-button {
+  background: white;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-radius: 4px;
+  width: 34px; height: 34px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  text-decoration: none;
+}
+.leaflet-home-button:hover { background: #f4f4f4; color: #000; }
+</style>
+```
 
+```{ojs}
+//| output: false
+
+// --- DB connection via stratum-tool ---
+db = {
+  const StratumSQLite = await window._stratumSQLite;
+  return StratumSQLite.open(window._dbPath, {
+    sqlJsPath: window._sqljsBase,
+    cacheKey:  "pilot-mareano@v0.1.7",
+  });
+}
+
+// --- Load Leaflet JS ---
+L = require("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")
+
+// --- Default view ---
+home_lat  = 68
+home_lng  = 15
+home_zoom = 4
+
+// --- Distance category order and colours (turbo-like palette) ---
+dist_order  = ["0 to 10km", "10 to 30km", "30 to 100km", "≥100km"]
+dist_colors = ({
+  "0 to 10km":   "#30123b",
+  "10 to 30km":  "#28bbec",
+  "30 to 100km": "#a2fc3c",
+  "≥100km":      "#fb8022"
+})
+```
+
+```{ojs}
+//| output: false
+
+// --- Query site points ---
+points_web = db.query(`
+  SELECT distinct c2.cruise_id,
+                  c1.core_id,
+                  c1.dde,
+                  c1.ddn,
+                  c1.dist_to_coast,
+                  CASE
+                      WHEN c1.dist_to_coast <= 10 THEN '0 to 10km'
+                      WHEN c1.dist_to_coast <= 30 THEN '10 to 30km'
+                      WHEN c1.dist_to_coast <= 100 THEN '30 to 100km'
+                      ELSE '≥100km'
+                  END AS Distance,
+                  c1.country,
+                  c1.country_code,
+                  c1.municipality,
+                  c1.sea_name
+  FROM core c1
+           JOIN cruise c2
+                ON c2.cruise_id = c1.cruise_id
+`)
+```
+
+```{ojs}
+//| column: page
+
+{
+  // --- Map container ---
+  const container = html`<div id="site-map"></div>`
+  yield container
+
+  if (!container._map) {
+    // Initialise map
+    const map = L.map(container, { zoomControl: true })
+      .setView([home_lat, home_lng], home_zoom)
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+      maxZoom: 19
+    }).addTo(map)
+
+    // --- Home / reset button ---
+    const HomeControl = L.Control.extend({
+      options: { position: "topleft" },
+      onAdd(map) {
+        const btn = L.DomUtil.create("a", "leaflet-home-button")
+        btn.innerHTML = '<i class="fa fa-expand" aria-hidden="true"></i>'
+        btn.title = "Reset to default view"
+        btn.setAttribute("aria-label", "Reset to default view")
+        L.DomEvent.on(btn, "click", (e) => {
+          L.DomEvent.stopPropagation(e)
+          map.setView([home_lat, home_lng], home_zoom)
+        })
+        return btn
+      }
+    })
+    new HomeControl().addTo(map)
+
+    // --- Layer groups (one per distance category) ---
+    const layerGroups = {}
+    for (const cat of dist_order) {
+      layerGroups[cat] = L.layerGroup().addTo(map)
+    }
+
+    // --- Add markers ---
+    for (const d of points_web) {
+      if (d.ddn == null || d.dde == null) continue
+      const color = dist_colors[d.Distance] ?? "#888"
+      const marker = L.circleMarker([d.ddn, d.dde], {
+        radius:      4,
+        color:       color,
+        fillColor:   color,
+        fillOpacity: 0.5,
+        weight:      1
+      })
+
+      marker.bindTooltip(
+        `Cruise: ${d.cruise_id}, Core: ${d.core_id}`,
+        { sticky: true }
+      )
+
+      marker.bindPopup(`
+        <strong>Cruise ID:</strong> ${d.cruise_id}<br>
+        <strong>Core ID:</strong> ${d.core_id}<br>
+        <strong>Longitude:</strong> ${d.dde != null ? d.dde.toFixed(2) : "—"}<br>
+        <strong>Latitude:</strong> ${d.ddn != null ? d.ddn.toFixed(2) : "—"}<br>
+        <strong>Distance:</strong> ${d.dist_to_coast != null ? d.dist_to_coast.toFixed(1) + " km" : "—"}<br>
+        <strong>Country:</strong> ${d.country ?? "—"}<br>
+        <strong>Country Code:</strong> ${d.country_code ?? "—"}<br>
+        <strong>Municipality:</strong> ${d.municipality ?? "—"}<br>
+        <strong>Sea/Ocean Name:</strong> ${d.sea_name ?? "—"}
+      `)
+
+      layerGroups[d.Distance]?.addLayer(marker)
+    }
+
+    // --- Layer control (top-right toggle) ---
+    // Reverse order so nearest distance is at top
+    const overlays = {}
+    for (const cat of [...dist_order].reverse()) {
+      overlays[cat] = layerGroups[cat]
+    }
+    L.control.layers(null, overlays, { collapsed: false }).addTo(map)
+
+    // --- Legend (bottom-right) ---
+    const LegendControl = L.Control.extend({
+      options: { position: "bottomright" },
+      onAdd() {
+        const div = L.DomUtil.create("div", "site-legend")
+        div.innerHTML = `<div class="site-legend-title">Distance to Coast</div>` +
+          dist_order.map(cat =>
+            `<div>
+              <span class="legend-dot" style="background:${dist_colors[cat]}"></span>${cat}
+            </div>`
+          ).join("")
+        return div
+      }
+    })
+    new LegendControl().addTo(map)
+
+    container._map = map
+  }
+}
 ```
