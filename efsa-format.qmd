@@ -9,66 +9,35 @@ The page presents the the data format of the EFDA reporting tool necessary for s
 library(tidyverse)
 library(knitr)
 
-readMe <- tibble::tibble(
-  `Field Label` = c(
-    "sampleId","recId","envComp","pristineLoc","sampleLocGC","sampleLocCM",
-    "sampleDate","traceEl","spec","conc","methAn","unit","weight","LOD",
-    "LOQ","accLab","phSed","TextureSedClay","TextureSedSilt","TextureSedSand",
-    "ocSed","phWater","hardWat","DOC","publicData","refPublication","comments"
-  ),
-  `Field Name` = c(
-    "Sample Identifier","Record Identifier","Environmental Compartment",
-    "Pristine Location","Sampling Location Geographical Coordinates",
-    "Sampling Location Country, Municipality","Sampling Date","Trace Element",
-    "Speciation","Measured Concentration","Method of Analysis","unit",
-    "Expression of product","Limit of Detection","Limit of Quantification",
-    "Accredited Laboratory","pH of porewater of the Sediment",
-    "Texture of the Clay Sediment","Texture of the Silt Sediment",
-    "Texture of the Sand Sediment","Organic Content of the Sediment",
-    "pH of Water","Hardness of Water","Dissolved Organic Carbon of Water",
-    "Data publicly available","Reference to the published data","Comments"
-  ),
-  Description = c(
-    "Sample identification according to the data provider.",
-    "Automatically generated unique identifier by concatenation of sample identifier and speciation.",
-    "Select the compartment in which the sample was collected.",
-    "YES/NO if area sampled was affected by pollution.",
-    "Latitude and longitude in decimal degrees.",
-    "Country and municipality of sampling location.",
-    "Date of sample collection.",
-    "Trace element measured.",
-    "Oxidation state of the trace element.",
-    "Analytical result of concentration.",
-    "Method used to measure concentration.",
-    "Unit of the relevant data element.",
-    "Dry weight or wet weight.",
-    "Limit of detection.",
-    "Limit of quantification.",
-    "YES/NO if laboratory is accredited.",
-    "Measured pH of porewater in sediment.",
-    "Clay fraction (% dw).",
-    "Silt fraction (% dw).",
-    "Sand fraction (% dw).",
-    "Organic matter in sediment (% dw).",
-    "Measured pH of water.",
-    "Water hardness category.",
-    "Dissolved organic carbon (mg/L).",
-    "YES/NO if data are publicly available.",
-    "Reference to publication.",
-    "Open comments field."
-  ),
-  Catalogue = c(
-    NA, NA, "envComp", "yesNo", NA, NA, NA, "traceEl", "spec", NA, "methAn",
-    "unit", "weight", NA, NA, "yesNo", NA, NA, NA, NA, NA, NA, "hardWater", NA,
-    "yesNo", NA, NA
-  ),
-  `Optionality` = c(
-    "Mandatory","Mandatory","Mandatory","Mandatory","Mandatory","Mandatory",
-    "Mandatory","Mandatory","Mandatory","Mandatory","Mandatory","Mandatory",
-    "Dependent Mandatory","Optional","Optional","Optional","Optional",
-    "Optional","Optional","Optional","Optional","Optional","Optional",
-    "Optional","Optional","Optional","Optional"
-  )
+readMe <- tribble(
+  ~`Field Label`,     ~`Field Name`,                               ~Description,                                                                                      ~Catalogue,   ~Optionality,
+  "sampleId",         "Sample Identifier",                         "Sample identification according to the data provider.",                                           NA,           "Mandatory",
+  "recId",            "Record Identifier",                         "Automatically generated unique identifier by concatenation of sample identifier and speciation.", NA,           "Mandatory",
+  "envComp",          "Environmental Compartment",                 "Select the compartment in which the sample was collected.",                                       "envComp",    "Mandatory",
+  "pristineLoc",      "Pristine Location",                         "YES/NO if area sampled was affected by pollution.",                                              "yesNo",      "Mandatory",
+  "sampleLocGC",      "Sampling Location Geographical Coordinates","Latitude and longitude in decimal degrees.",                                                      NA,           "Mandatory",
+  "sampleLocCM",      "Sampling Location Country, Municipality",   "Country and municipality of sampling location.",                                                  NA,           "Mandatory",
+  "sampleDate",       "Sampling Date",                             "Date of sample collection.",                                                                      NA,           "Mandatory",
+  "traceEl",          "Trace Element",                             "Trace element measured.",                                                                         "traceEl",    "Mandatory",
+  "spec",             "Speciation",                                "Oxidation state of the trace element.",                                                           "spec",       "Mandatory",
+  "conc",             "Measured Concentration",                    "Analytical result of concentration.",                                                             NA,           "Mandatory",
+  "methAn",           "Method of Analysis",                        "Method used to measure concentration.",                                                           "methAn",     "Mandatory",
+  "unit",             "unit",                                      "Unit of the relevant data element.",                                                              "unit",       "Mandatory",
+  "weight",           "Expression of product",                     "Dry weight or wet weight.",                                                                       "weight",     "Dependent Mandatory",
+  "LOD",              "Limit of Detection",                        "Limit of detection.",                                                                             NA,           "Optional",
+  "LOQ",              "Limit of Quantification",                   "Limit of quantification.",                                                                        NA,           "Optional",
+  "accLab",           "Accredited Laboratory",                     "YES/NO if laboratory is accredited.",                                                             "yesNo",      "Optional",
+  "phSed",            "pH of porewater of the Sediment",           "Measured pH of porewater in sediment.",                                                           NA,           "Optional",
+  "TextureSedClay",   "Texture of the Clay Sediment",               "Clay fraction (% dw).",                                                                           NA,           "Optional",
+  "TextureSedSilt",   "Texture of the Silt Sediment",               "Silt fraction (% dw).",                                                                           NA,           "Optional",
+  "TextureSedSand",   "Texture of the Sand Sediment",               "Sand fraction (% dw).",                                                                           NA,           "Optional",
+  "ocSed",            "Organic Content of the Sediment",           "Organic matter in sediment (% dw).",                                                              NA,           "Optional",
+  "phWater",          "pH of Water",                               "Measured pH of water.",                                                                           NA,           "Optional",
+  "hardWat",          "Hardness of Water",                         "Water hardness category.",                                                                        "hardWater",  "Optional",
+  "DOC",              "Dissolved Organic Carbon of Water",         "Dissolved organic carbon (mg/L).",                                                                NA,           "Optional",
+  "publicData",       "Data publicly available",                   "YES/NO if data are publicly available.",                                                          "yesNo",      "Optional",
+  "refPublication",   "Reference to the published data",           "Reference to publication.",                                                                       NA,           "Optional",
+  "comments",         "Comments",                                  "Open comments field.",                                                                            NA,           "Optional"
 )
 
 readMe <- readMe %>%
@@ -80,58 +49,70 @@ readMe <- readMe %>%
   )
 
 readMe <- readMe %>% 
-  mutate( Catalogue = ifelse( !is.na(Catalogue), paste0("<a href='#", Catalogue, "'>", Catalogue, "</a>"), NA ) )
+  mutate( Catalogue = ifelse( Catalogue != "", paste0("<a href='#", Catalogue, "'>", Catalogue, "</a>"), "" ) )
 
-envComp <- tibble::tibble(
-  `Term Name` = c("soil","freshwater","freshwater sediment","marine sediment"),
-  `Term Code` = c("A16PE","A0F7G","A198T#F34.A0F7G","A198T#F34.A16YY"),
-  Description = c(
-    "Land",
-    "Naturally occurring freshwater",
-    "Sediment, HOST-SAMPLED = Naturally occurring freshwater",
-    "Sediment, HOST-SAMPLED = Seawater"
-  ),
-  `Note` = c(
-    "Group covering the samples for analysis of different types of lands and grounds.",
-    "Freshwater excluding sea- and brackish water.",
-    "Naturally occurring solid material transported by natural forces.",
-    "Naturally occurring solid material transported by natural forces."
-  )
+envComp <- tribble(
+  ~`Term Name`,          ~`Term Code`,          ~Description,                                               ~Note,
+  "soil",                "A16PE",               "Land",                                                     "Group covering the samples for analysis of different types of lands and grounds.",
+  "freshwater",          "A0F7G",               "Naturally occurring freshwater",                            "Freshwater excluding sea- and brackish water.",
+  "freshwater sediment", "A198T#F34.A0F7G",     "Sediment, HOST-SAMPLED = Naturally occurring freshwater", "Naturally occurring solid material transported by natural forces.",
+  "marine sediment",     "A198T#F34.A16YY",     "Sediment, HOST-SAMPLED = Seawater",                        "Naturally occurring solid material transported by natural forces."
 )
 
-yesNo <- tibble::tibble(
-  `Term Name` = c("No","Yes"),
-  `Term Code` = c("N","Y")
+yesNo <- tribble(
+  ~`Term Name`, ~`Term Code`,
+  "No",         "N",
+  "Yes",        "Y"
 )
 
-traceEl <- tibble::tibble(
-  `Term Name` = c("Co","Cu","I","Mn","Mo","Se","Zn"),
-  `Term Code` = c(
-    "RF-00000161-CHE","RF-00000167-CHE","RF-00000050-CHE",
-    "RF-00000176-CHE","RF-00000179-CHE","RF-00000184-CHE",
-    "RF-00000205-CHE"
-  )
+traceEl <- tribble(
+  ~`Term Name`, ~`Term Code`,
+  "Co",         "RF-00000161-CHE",
+  "Cu",         "RF-00000167-CHE",
+  "I",          "RF-00000050-CHE",
+  "Mn",         "RF-00000176-CHE",
+  "Mo",         "RF-00000179-CHE",
+  "Se",         "RF-00000184-CHE",
+  "Zn",         "RF-00000205-CHE"
 )
 
-spec <- tibble::tibble(
-  `Term Name` = c(
-    "Co (Total)","Co(+II)","Co(+III)","Other",
-    "Cu (Total)","Cu(+I)","Cu(+II)","Other",
-    "I (Total)","I(-I)","iodide","I(+I)","I(+III)","Iodates","I(+V)","I(+VII)","Other",
-    "Mn (Total)","Mn(+II)","Mn(+IV)","Mn(+VI)","Mn(+VII)","Other",
-    "Mo (Total)","Mo(+IV)","Mo(+VI)","Other",
-    "Se (Total)","Se(-II)","Se(+II)","Se(+IV)","Other",
-    "Zn (Total)","Zn(+II)","Other"
-  ),
-  `Term Code` = c(
-    "RF-00000162-CHE",NA,NA,NA,
-    "RF-00000168-CHE",NA,NA,NA,
-    "check CAS number, ECHA","RF-00000310-NTR",NA,NA,"RF-00000049-CHE",NA,NA,NA,NA,
-    "RF-00000177-CHE",NA,NA,NA,NA,NA,
-    "RF-00000180-CHE",NA,NA,NA,
-    "RF-00000186-CHE",NA,NA,NA,NA,
-    "RF-00000206-CHE",NA,NA
-  )
+spec <- tribble(
+  ~`Term Name`, ~`Term Code`,
+  "Co (Total)", "RF-00000162-CHE",
+  "Co(+II)",    NA,
+  "Co(+III)",   NA,
+  "Other",      NA,
+  "Cu (Total)", "RF-00000168-CHE",
+  "Cu(+I)",     NA,
+  "Cu(+II)",    NA,
+  "Other",      NA,
+  "I (Total)",  "check CAS number, ECHA",
+  "I(-I)",      "RF-00000310-NTR",
+  "iodide",     NA,
+  "I(+I)",      NA,
+  "I(+III)",    "RF-00000049-CHE",
+  "Iodates",    NA,
+  "I(+V)",      NA,
+  "I(+VII)",    NA,
+  "Other",      NA,
+  "Mn (Total)", "RF-00000177-CHE",
+  "Mn(+II)",    NA,
+  "Mn(+IV)",    NA,
+  "Mn(+VI)",    NA,
+  "Mn(+VII)",   NA,
+  "Other",      NA,
+  "Mo (Total)", "RF-00000180-CHE",
+  "Mo(+IV)",    NA,
+  "Mo(+VI)",    NA,
+  "Other",      NA,
+  "Se (Total)", "RF-00000186-CHE",
+  "Se(-II)",    NA,
+  "Se(+II)",    NA,
+  "Se(+IV)",    NA,
+  "Other",      NA,
+  "Zn (Total)", "RF-00000206-CHE",
+  "Zn(+II)",    NA,
+  "Other",      NA
 )
 
 spec <- spec %>%
@@ -142,56 +123,43 @@ spec <- spec %>%
     )
   )
 
-unit <- tibble::tibble(
-  `Term Name` = c(
-    "mg/kg","ng/kg","%","mol","mmol","%","%","mg/L"
-  ),
-  `Term Code` = c(
-    "G061A","G077A","G138A","G119A","G115A","G138A","G138A","G062A"
-  ),
-  `Data Element (Field Label)` = c(
-    "conc","conc","conc","conc","conc","conc","ocSed","DOC"
-  )
+unit <- tribble(
+  ~`Term Name`, ~`Term Code`, ~`Data Element (Field Label)`,
+  "mg/kg",      "G061A",      "conc",
+  "ng/kg",      "G077A",      "conc",
+  "%",          "G138A",      "conc",
+  "mol",        "G119A",      "conc",
+  "mmol",       "G115A",      "conc",
+  "%",          "G138A",      "conc",
+  "%",          "G138A",      "ocSed",
+  "mg/L",       "G062A",      "DOC"
 )
 
-weight <- tibble::tibble(
-  `Term Name` = c("dw","ww"),
-  `Term Code` = c("B002A","B001A"),
-  `Note` = c(
-    "Dry matter, dry weight"
-  )
+weight <- tribble(
+  ~`Term Name`, ~`Term Code`, ~Note,
+  "dw",         "B002A",      "Dry matter, dry weight",
+  "ww",         "B001A",      NA
 )
 
-hardWater <- tibble::tibble(
-  `Term Name` = c("Soft","Moderate","Hard","Very hard"),
-  Description = c(
-    "0–60 mg CaCO3/L or 0–0.6 mmol/L or 0–3.37 dGH",
-    "61–120 mg CaCO3/L or 0.61–1.20 mmol/L or 3.38–6.74 dGH",
-    "121–180 mg CaCO3/L or 1.21–1.80 mmol/L or 6.75–10.11 dGH",
-    "≥181 mg CaCO3/L or ≥1.81 mmol/L or ≥10.12 dGH"
-  )
+hardWater <- tribble(
+  ~`Term Name`, ~Description,
+  "Soft",       "0–60 mg CaCO3/L or 0–0.6 mmol/L or 0–3.37 dGH",
+  "Moderate",   "61–120 mg CaCO3/L or 0.61–1.20 mmol/L or 3.38–6.74 dGH",
+  "Hard",       "121–180 mg CaCO3/L or 1.21–1.80 mmol/L or 6.75–10.11 dGH",
+  "Very hard",  "≥181 mg CaCO3/L or ≥1.81 mmol/L or ≥10.12 dGH"
 )
 
-methAn <- tibble::tibble(
-  `Term Name` = c(
-    "ICP-MS","ICP-AES","FAAS","ETAAS (GFAAS)","WD-XRFS",
-    "IC-UV/VIS","HPLC-ICP-MS","GC-ICP-MS","Other"
-  ),
-  `Term Code` = c(
-    "F064A","F057A","F350A","F054A","F832A",
-    "F833A","F029A","F366A",NA
-  ),
-  `Note` = c(
-    "Inductively coupled plasma mass spectrometry",
-    "Inductively coupled plasma atomic emission spectroscopy",
-    "Flame atomic absorption spectrometry",
-    "Electrothermal atomic absorption spectrometry",
-    "Wavelength Dispersive X-Ray Fluorescence Spectroscopy",
-    "Ion Chromatography UV/VIS detection",
-    "High performance liquid chromatography ICP-MS",
-    "Gas Chromatography ICP-MS",
-    NA
-  )
+methAn <- tribble(
+  ~`Term Name`,     ~`Term Code`, ~Note,
+  "ICP-MS",         "F064A",      "Inductively coupled plasma mass spectrometry",
+  "ICP-AES",        "F057A",      "Inductively coupled plasma atomic emission spectroscopy",
+  "FAAS",           "F350A",      "Flame atomic absorption spectrometry",
+  "ETAAS (GFAAS)",  "F054A",      "Electrothermal atomic absorption spectrometry",
+  "WD-XRFS",        "F832A",      "Wavelength Dispersive X-Ray Fluorescence Spectroscopy",
+  "IC-UV/VIS",      "F833A",      "Ion Chromatography UV/VIS detection",
+  "HPLC-ICP-MS",    "F029A",      "High performance liquid chromatography ICP-MS",
+  "GC-ICP-MS",      "F366A",      "Gas Chromatography ICP-MS",
+  "Other",          NA,           NA
 )
 
 ```

@@ -135,7 +135,7 @@ value_range_result = db.query(`
                  JOIN parameter p ON p.parameter = s.parameter
         WHERE p.symbol = '${selected_element.value}'
           AND c1.year BETWEEN ${year_start} AND ${year_end}
-        GROUP BY p.symbol, c2.dde, c2.ddn) t
+        GROUP BY p.symbol, c2.ddn, c2.dde) t
   GROUP BY symbol
 `)
 
@@ -144,8 +144,8 @@ value_max = value_range_result[0]?.max_avg_value ?? 1
 
 // --- Map data query ---
 map_data = db.query(`
-  SELECT c2.dde AS longitude,
-         c2.ddn AS latitude,
+  SELECT c2.ddn AS latitude,
+         c2.dde AS longitude,
          AVG(s.value) AS avg_value
   FROM sediment s
            JOIN cruise c1 ON c1.cruise_id = s.cruise_id
@@ -155,7 +155,7 @@ map_data = db.query(`
            JOIN parameter p ON p.parameter = s.parameter
   WHERE p.symbol = '${selected_element.value}'
     AND c1.year BETWEEN ${year_start} AND ${year_end}
-  GROUP BY p.symbol, c2.dde, c2.ddn
+  GROUP BY p.symbol, c2.ddn, c2.dde
 `)
 
 // --- Colour scale using element+year-specific range ---
@@ -274,8 +274,8 @@ point_data = {
     SELECT c1.cruise_type AS 'Cruise Type',
            CAST(c1.year AS TEXT) AS Year,
            c2.sampling_tool AS 'Tool',
-           c2.dde AS Longitude,
            c2.ddn AS Latitude,
+           c2.dde AS Longitude,
            s1.depth_from AS 'From',
            s1.depth_to AS 'To',
            p.parameter as Parameter,
