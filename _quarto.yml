@@ -13,6 +13,10 @@ website:
   title: "Mareano Pilot"
   navbar:
     search: true
+    right:
+      - icon: github
+        href: https://github.com/seafood-hazards/mareano-pilot
+        aria-label: GitHub
     left:
       - text: "Home"
         href: index.qmd
