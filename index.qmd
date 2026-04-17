@@ -19,28 +19,71 @@ As the final goal of the project, the results should be submitted to EFSA by exp
 
 From the downloaded `ods` file, the data from the `INFO` and `INORGANIC` sheets were used to create the pilot database.
 
-### Count of Sediment Cores
+## Count of Sediment Core Sites
+The table below summarizes the number of sediment core sites collected across six parameters for two cruise types (Mareano Cruise and Marine Basecamp Cruise) between 2003 and 2021.
 
-The table below summarizes the number of sediment cores collected across 39 parameters for two cruise types (Mareano Cruise and Marine Basecamp Cruise) between 2003 and 2021.
+```{ojs}
+//| output: false
 
-```{r}
-library(tidyverse)
-library(DT)
+db = {
+  const StratumSQLite = await window._stratumSQLite;
+  return StratumSQLite.open(window._dbPath, {
+    sqlJsPath: window._sqljsBase,
+    cacheKey:  "pilot-mareano@v0.1.7",
+  });
+}
 
-# Read data file
-local_data_file_name <- "pilot_mareano.tsv.gz"
-df_mariano_sediment <- read_tsv(local_data_file_name)
-df_counts <- df_mariano_sediment %>%
-  distinct(cruise_type, year, core_id, element) %>%
-  count(cruise_type, year, element) %>%
-  pivot_wider(names_from = element, values_from = n) %>%
-  replace(is.na(.), 0) %>%
-  mutate(cruise_type = factor(cruise_type)) %>% 
-  rename(`Cruise Type` = cruise_type,
-         Year = year)
+aq = require("arquero")
+```
 
-datatable(df_counts, filter = "top", rownames = FALSE, class = "nowrap", options = list(scrollX = TRUE))
+```{ojs}
+//| output: false
 
+// --- Query: long format counts per cruise type, year, and element ---
+counts_long = db.query(`
+  SELECT cruise_type,
+         CAST(year AS TEXT) as year,
+         element,
+         COUNT(*) AS count
+  FROM (
+    SELECT DISTINCT
+      c2.cruise_type,
+      c2.year,
+      c1.core_id,
+      p.element
+    FROM sediment s
+    JOIN parameter p  ON p.parameter  = s.parameter
+    JOIN sample    s2 ON s2.cruise_id = s.cruise_id
+                     AND s2.core_id   = s.core_id
+                     AND s2.sample_id = s.sample_id
+    JOIN core      c1 ON c1.cruise_id = s2.cruise_id
+                     AND c1.core_id   = s2.core_id
+    JOIN cruise    c2 ON c2.cruise_id = c1.cruise_id
+    WHERE p.element IN (
+      'Cobalt', 'Copper', 'Manganese', 'Molybdenum', 'Selenium', 'Zinc'
+    )
+  ) t
+  GROUP BY cruise_type, year, element
+  ORDER BY cruise_type, year, element
+`)
+
+// --- Pivot to wide format using Arquero ---
+elements_wide = ["Cobalt", "Copper", "Manganese", "Molybdenum", "Selenium", "Zinc"]
+
+counts_wide = aq.from(counts_long)
+  .groupby("cruise_type", "year")
+  .pivot("element", "count")
+  .orderby("cruise_type", "year")
+  .rename({ cruise_type: "Cruise Type", year: "Year" })
+  .objects()
+```
+
+```{ojs}
+Inputs.table(counts_wide, {
+  columns: ["Cruise Type", "Year", ...elements_wide],
+  layout: "auto",
+  rows: 20
+})
 ```
 
 ## Database Design and Creation

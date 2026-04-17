@@ -3,7 +3,6 @@ project:
   pre-render: download_resources.R
   resources:
     - pilot_mareano.sqlite
-    - pilot_mareano.tsv.tsv.gz
     - libs/sqljs/
   render:
     - "*.qmd"
