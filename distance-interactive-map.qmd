@@ -74,17 +74,10 @@ The map below displays the spatial distribution of sediment cores. The markers a
 </style>
 ```
 
+{{< include _db-setup.qmd >}}
+
 ```{ojs}
 //| output: false
-
-// --- DB connection via stratum-tool ---
-db = {
-  const StratumSQLite = await window._stratumSQLite;
-  return StratumSQLite.open(window._dbPath, {
-    sqlJsPath: window._sqljsBase,
-    cacheKey:  "pilot-mareano@v0.1.7",
-  });
-}
 
 // --- Load Leaflet JS ---
 L = require("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")
@@ -111,8 +104,8 @@ dist_colors = ({
 points_web = db.query(`
   SELECT distinct c2.cruise_id,
                   c1.core_id,
-                  c1.dde,
                   c1.ddn,
+                  c1.dde,
                   c1.dist_to_coast,
                   CASE
                       WHEN c1.dist_to_coast <= 10 THEN '0 to 10km'
@@ -191,8 +184,8 @@ points_web = db.query(`
       marker.bindPopup(`
         <strong>Cruise ID:</strong> ${d.cruise_id}<br>
         <strong>Core ID:</strong> ${d.core_id}<br>
-        <strong>Longitude:</strong> ${d.dde != null ? d.dde.toFixed(2) : "—"}<br>
         <strong>Latitude:</strong> ${d.ddn != null ? d.ddn.toFixed(2) : "—"}<br>
+        <strong>Longitude:</strong> ${d.dde != null ? d.dde.toFixed(2) : "—"}<br>
         <strong>Distance:</strong> ${d.dist_to_coast != null ? d.dist_to_coast.toFixed(1) + " km" : "—"}<br>
         <strong>Country:</strong> ${d.country ?? "—"}<br>
         <strong>Country Code:</strong> ${d.country_code ?? "—"}<br>

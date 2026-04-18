@@ -1,17 +1,7 @@
 options(timeout = 600)
 
-# ── TSV data ───────────────────────────────────────────────────────────────
-data_file_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.7/pilot_mareano.tsv.gz"
-local_data_file_name <- "pilot_mareano.tsv.gz"
-if (!file.exists(local_data_file_name)) {
-  download.file(data_file_url, destfile = local_data_file_name, mode = "wb")
-  message("TSV downloaded.")
-} else {
-  message("Using existing TSV.")
-}
-
 # ── SQLite database ────────────────────────────────────────────────────────
-db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.7/pilot_mareano.sqlite"
+db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.9/pilot_mareano.sqlite"
 local_db_file_name <- "pilot_mareano.sqlite"
 if (!file.exists(local_db_file_name)) {
   download.file(db_url, local_db_file_name, mode = "wb")
@@ -21,9 +11,9 @@ if (!file.exists(local_db_file_name)) {
 }
 
 # ── sql.js + stratum-sqlite ────────────────────────────────────────────────
-# All three files are downloaded once and served from the site.
+# All four files are downloaded once and served from the site.
 # sql-wasm.js and sql-wasm.wasm are the sql.js engine that stratum-sqlite uses.
-# stratum-sqlite.umd.js is the library that wraps sql.js with a clean API.
+# stratum-sqlite.umd.js and stratum-sqlite.esm.js are the libraries that wrap sql.js with a clean API.
 sqljs_dir <- "libs/sqljs"
 dir.create(sqljs_dir, recursive = TRUE, showWarnings = FALSE)
 
@@ -37,7 +27,7 @@ for (f in c("sql-wasm.js", "sql-wasm.wasm")) {
   }
 }
 
-# stratum-sqlite library (ESM build — loaded via dynamic import() in header.html)
+# stratum-sqlite libraries
 for (f in c("stratum-sqlite.umd.js", "stratum-sqlite.esm.js")) {
   dest <- file.path(sqljs_dir, f)
   if (!file.exists(dest)) {
