@@ -9,7 +9,7 @@ The data file was created for the initial analysis using the Mareano data.
 
 A tab-delimited file containing all major data from the database is available for download at the following location.
 
- * [pilot_mareano.tsv.gz](https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.4/pilot_mareano.tsv.gz)
+ * [pilot_mareano.tsv.gz](https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.9/pilot_mareano.tsv.gz)
 
 ## Data File Summary
 
@@ -25,52 +25,49 @@ Each row represents a single **chemical measurement** (e.g., Arsenic, Lead, TOC)
 ```{r}
 library(tibble)
 
-# Definition of the exported TSV columns and their sources
-exported_columns_tbl <- tibble(
-  `Column Name` = c(
-    # Keys
-    "cruise_id", "core_id", "sample_id", 
-    
-    # Cruise Metadata
-    "cruise_type", "year",
-    
-    # Core Metadata
-    "core_name", "sampling_tool", "dde", "ddn", "mbsl", "dist_to_coast",
-    
-    # Granulometry (Pivoted from Sediment Table)
-    "clay", "silt", "sand", "gravel",
-    
-    # Sample Metadata
-    "depth_from", "depth_to", 
-    
-    # Chemistry / Measurement Data
-    "element", "parameter", "value", "is_lld",
-    
-    # LLD
-    "lld",
+# Definition of the exported TSV columns and their sources using tribble for easy editing
+exported_columns_tbl <- tribble(
+  ~`Column Name`,            ~`Source Table`,           ~Description,
+  # Keys
+  "cruise_id",               "Cruise / Core / Sample",  "Unique Cruise Identifier",
+  "core_id",                 "Core / Sample",           "Unique Core Identifier",
+  "sample_id",               "Sample",                  "Unique Sample Identifier",
 
-    # Category
-    "category"
-  ),
-  `Source Table` = c(
-    "Cruise / Core / Sample", "Core / Sample", "Sample",
-    "Cruise", "Cruise",
-    "Core", "Core", "Core", "Core", "Core", "Core",
-    "Sediment (Pivoted)", "Sediment (Pivoted)", "Sediment (Pivoted)", "Sediment (Pivoted)",
-    "Sample", "Sample",
-    "Parameter", "Parameter / Sediment", "Sediment", "Sediment", "LLD", "Parameter (Categorized)"
-  ),
-  `Description` = c(
-    "Unique Cruise Identifier", "Unique Core Identifier", "Unique Sample Identifier",
-    "Cruise type (Mareano Cruise/Marine Basecamp Cruise)", "Year of the cruise",
-    "Short name of the core", "Tool used for sampling", "Decimal Degrees East", "Decimal Degrees North", "Meters Below Sea Level", "Distance to nearest Norwegian coastline (km)",
-    "Clay fraction (%)", "Silt fraction (%)", "Sand fraction (%)", "Gravel fraction (%)",
-    "Top depth of sample interval (cm)", "Bottom depth of sample interval (cm)",
-    "Chemical element name", "Specific parameter measured (element name + method)", "Measured value", "Flag: 1 if value is Lower Level Detection (LLD)",
-    "Lower limits of detection (LLD) value",
-    "efsa: EFSA elements, other: Other elements, tcs: Total sulfur and carbon"
-  )
+  # Cruise Metadata
+  "cruise_type",             "Cruise",                  "Cruise type (Mareano Cruise/Marine Basecamp Cruise)",
+  "year",                    "Cruise",                  "Year of the cruise",
+
+  # Core Metadata
+  "core_name",               "Core",                    "Short name of the core",
+  "sampling_tool",           "Core",                    "Tool used for sampling",
+  "ddn",                     "Core",                    "Decimal Degrees North",
+  "dde",                     "Core",                    "Decimal Degrees East",
+  "mbsl",                    "Core",                    "Meters Below Sea Level",
+  "dist_to_coast",           "Core",                    "Distance to nearest Norwegian coastline (km)",
+
+  # Granulometry (Pivoted from Sediment Table)
+  "clay",                    "Sediment (Pivoted)",      "Clay fraction (%)",
+  "silt",                    "Sediment (Pivoted)",      "Silt fraction (%)",
+  "sand",                    "Sediment (Pivoted)",      "Sand fraction (%)",
+  "gravel",                  "Sediment (Pivoted)",      "Gravel fraction (%)",
+
+  # Sample Metadata
+  "depth_from",              "Sample",                  "Top depth of sample interval (cm)",
+  "depth_to",                "Sample",                  "Bottom depth of sample interval (cm)",
+
+  # Chemistry / Measurement Data
+  "element",                 "Parameter",               "Chemical element name",
+  "parameter",               "Parameter / Sediment",    "Specific parameter measured (element name + method)",
+  "value",                   "Sediment",                "Measured value",
+  "is_lld",                  "Sediment",                "Flag: 1 if value is Lower Level Detection (LLD)",
+
+  # LLD
+  "lld",                     "LLD",                     "Lower limits of detection (LLD) value",
+
+  # Category
+  "category",                "Parameter (Categorized)", "efsa: EFSA elements, other: Other elements, tcs: Total sulfur and carbon"
 )
 
 exported_columns_tbl
+
 ```

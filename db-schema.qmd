@@ -31,48 +31,26 @@ The ID values in the `cruise_id` column are formulated as follows:
 ``` {r}
 library(tibble)
 
-cruise_tbl <- tibble(
-  `Name` = c(
-    "cruise_id", "source", "cruise_type", "year",
-    "cruise_no", "start", "end", 
-    "start_year", "start_month", "start_day", 
-    "end_year", "end_month", "end_day", 
-    "area", "cruise_no2"
-  ),
-  `Data Type` = c(
-    "TEXT", "TEXT", "TEXT", "INTEGER", "INTEGER", "TEXT", "TEXT",
-    "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER", "INTEGER",
-    "INTEGER", "INTEGER"
-  ),
-  `PK` = c(
-    "✓", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-  ),
-  `NA Allowed` = c(
-    FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, 
-    TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-    TRUE, TRUE
-  ),
-  `Description` = c(
-    "Primary Key. Unique cruise identifier (e.g., MA-2003-209).",
-    "Data source (Mareano).",
-    "Cruise type (Mareano Cruise/Marine Basecamp Cruise).",
-    "Year of the cruise.",
-    "Cruise number.",
-    "Start date of the cruise",
-    "End date of the cruise",
-    "Start year of the cruise",
-    "Start month of the cruise",
-    "Start day of the cruise",
-    "End year of the cruise",
-    "End month of the cruise",
-    "End day of the cruise",
-    "Survey area.",
-    "Alternative cruise number."
-  )
+cruise_tbl <- tribble(
+  ~Name,          ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
+  "cruise_id",    "TEXT",       "✓", "",         "Primary Key. Unique cruise identifier (e.g., MA-2003-209).",
+  "source",       "TEXT",       "",  "",         "Data source (Mareano).",
+  "cruise_type",  "TEXT",       "",  "",         "Cruise type (Mareano Cruise/Marine Basecamp Cruise).",
+  "year",         "INTEGER",    "",  "",         "Year of the cruise.",
+  "cruise_no",    "INTEGER",    "",  "✓",          "Cruise number.",
+  "start",        "TEXT",       "",  "✓",          "Start date of the cruise",
+  "end",          "TEXT",       "",  "✓",          "End date of the cruise",
+  "start_year",   "INTEGER",    "",  "✓",          "Start year of the cruise",
+  "start_month",  "INTEGER",    "",  "✓",          "Start month of the cruise",
+  "start_day",    "INTEGER",    "",  "✓",          "Start day of the cruise",
+  "end_year",     "INTEGER",    "",  "✓",          "End year of the cruise",
+  "end_month",    "INTEGER",    "",  "✓",          "End month of the cruise",
+  "end_day",      "INTEGER",    "",  "✓",          "End day of the cruise",
+  "area",         "INTEGER",    "",  "✓",          "Survey area.",
+  "cruise_no2",   "INTEGER",    "",  "✓",          "Alternative cruise number."
 )
 
 cruise_tbl
-
 ```
 
 
@@ -90,38 +68,21 @@ The {sampling_tool} part is three characters, padded with zeros, while the {core
 
 ### Table Columns
 ``` {r}
-core_tbl <- tibble(
-  `Name` = c(
-    "cruise_id", "core_id", "station_no", "sampling_tool",
-    "tool_id", "core_name", "dde", "ddn", "mbsl", "dist_to_coast"
-  ),
-  `Data Type` = c(
-    "TEXT", "TEXT", "TEXT", "TEXT",
-    "TEXT", "TEXT", "REAL", "REAL", "REAL", "INTEGER"
-  ),
-  `PK` = c(
-    "✓", "✓", "", "", "", "", "", "", "", ""
-  ),
-  `NA Allowed` = c(
-    FALSE, FALSE, TRUE, TRUE,
-    TRUE, TRUE, FALSE, FALSE, TRUE, TRUE
-  ),
-  `Description` = c(
-    "Primary Key. Foreign Key to Cruise table.",
-    "Primary Key. Unique core identifier (e.g., R0625-BC-000-c1).",
-    "Station number.",
-    "Sampling tool code (BC, MC, GR).",
-    "Specific tool identifier.",
-    "Short core name.",
-    "Longitude (Decimal Degrees East).",
-    "Latitude (Decimal Degrees North).",
-    "Water depth (Meters Below Sea Level).",
-    "Distance to the nearest Norwegian coastline (km)."
-  )
+core_tbl <- tribble(
+  ~Name,           ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
+  "cruise_id",     "TEXT",       "✓", "",         "Primary Key. Foreign Key to Cruise table.",
+  "core_id",       "TEXT",       "✓", "",         "Primary Key. Unique core identifier (e.g., R0625-BC-000-c1).",
+  "station_no",    "TEXT",       "",  "✓",          "Station number.",
+  "sampling_tool", "TEXT",       "",  "✓",          "Sampling tool code (BC, MC, GR).",
+  "tool_id",       "TEXT",       "",  "✓",          "Specific tool identifier.",
+  "core_name",     "TEXT",       "",  "✓",          "Short core name.",
+  "ddn",           "REAL",       "",  "",         "Latitude (Decimal Degrees North).",
+  "dde",           "REAL",       "",  "",         "Longitude (Decimal Degrees East).",
+  "mbsl",          "REAL",       "",  "✓",          "Water depth (Meters Below Sea Level).",
+  "dist_to_coast", "INTEGER",    "",  "✓",          "Distance to the nearest Norwegian coastline (km)."
 )
 
 core_tbl
-
 ```
 
 ## Sample Table
@@ -138,38 +99,18 @@ All parts are two characters, padded with zeros.
 
 ### Table Columns
 ``` {r}
-sample_tbl <- tibble(
-  `Name` = c(
-    "cruise_id", "core_id", "sample_id",
-    "depth_from", "depth_to",
-    "batch_id", "sample_id2"
-  ),
-  `Data Type` = c(
-    "TEXT", "TEXT", "TEXT",
-    "INTEGER", "INTEGER",
-    "TEXT", "TEXT"
-  ),
-  `PK` = c(
-    "✓", "✓", "✓", "", "", "", ""
-  ),
-  `NA Allowed` = c(
-    FALSE, FALSE, FALSE,
-    FALSE, FALSE,
-    TRUE, TRUE
-  ),
-  `Description` = c(
-    "Primary Key. Foreign Key to Cruise table.",
-    "Primary Key. Foreign Key to Core table.",
-    "Primary Key. Unique sample identifier (e.g., c1_00-02).",
-    "Top depth of the sample interval (cm).",
-    "Bottom depth of the sample interval (cm).",
-    "Laboratory batch identifier.",
-    "Alternative sample identifier."
-  )
+sample_tbl <- tribble(
+  ~Name,        ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
+  "cruise_id",  "TEXT",       "✓", "",         "Primary Key. Foreign Key to Cruise table.",
+  "core_id",    "TEXT",       "✓", "",         "Primary Key. Foreign Key to Core table.",
+  "sample_id",  "TEXT",       "✓", "",         "Primary Key. Unique sample identifier (e.g., c1_00-02).",
+  "depth_from", "INTEGER",    "",  "",         "Top depth of the sample interval (cm).",
+  "depth_to",   "INTEGER",    "",  "",         "Bottom depth of the sample interval (cm).",
+  "batch_id",   "TEXT",       "",  "✓",          "Laboratory batch identifier.",
+  "sample_id2", "TEXT",       "",  "✓",          "Alternative sample identifier."
 )
 
 sample_tbl
-
 ```
 
 ## Parameter Table
@@ -178,34 +119,17 @@ The parameter table is a look-up table that contains parameter information for t
 
 ### Table Columns
 ``` {r}
-parameter_tbl <- tibble(
-  `Name` = c(
-    "parameter", "unit", "element",
-    "method1", "method2", "institute"
-  ),
-  `Data Type` = c(
-    "TEXT", "TEXT", "TEXT",
-    "TEXT", "TEXT", "TEXT"
-  ),
-  `PK` = c(
-    "✓", "", "", "", "", ""
-  ),
-  `NA Allowed` = c(
-    FALSE, TRUE, TRUE,
-    TRUE, TRUE, TRUE
-  ),
-  `Description` = c(
-    "Primary Key. Name of the measured parameter (e.g., Se, Cd_a).",
-    "Unit of measurement (e.g., mg/kg, %).",
-    "Chemical element (e.g., Selenium, Cadmium).",
-    "Primary analytical method.",
-    "Secondary analytical method.",
-    "Institute responsible for the analysis."
-  )
+parameter_tbl <- tribble(
+  ~Name,       ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
+  "parameter", "TEXT",       "✓", "",         "Primary Key. Name of the measured parameter (e.g., Se, Cd_a).",
+  "unit",      "TEXT",       "",  "✓",          "Unit of measurement (e.g., mg/kg, %).",
+  "element",   "TEXT",       "",  "✓",          "Chemical element (e.g., Selenium, Cadmium).",
+  "method1",   "TEXT",       "",  "✓",          "Primary analytical method.",
+  "method2",   "TEXT",       "",  "✓",          "Secondary analytical method.",
+  "institute", "TEXT",       "",  "✓",          "Institute responsible for the analysis."
 )
 
 parameter_tbl
-
 ```
 
 ## Sediment Table
@@ -214,34 +138,17 @@ The sediment table contains measurements for all parameters.
 
 ### Table Columns
 ``` {r}
-sediment_tbl <- tibble(
-  `Name` = c(
-    "cruise_id", "core_id", "sample_id",
-    "parameter", "value", "is_lld"
-  ),
-  `Data Type` = c(
-    "TEXT", "TEXT", "TEXT",
-    "TEXT", "REAL", "INTEGER"
-  ),
-  `PK` = c(
-    "✓", "✓", "✓", "✓", "", ""
-  ),
-  `NA Allowed` = c(
-    FALSE, FALSE, FALSE,
-    FALSE, FALSE, FALSE
-  ),
-  `Description` = c(
-    "Primary Key. Foreign Key to Cruise table.",
-    "Primary Key. Foreign Key to Core table.",
-    "Primary Key. Foreign Key to Sample table.",
-    "Primary Key. Foreign Key to Parameter table.",
-    "Measured value.",
-    "Flag: 1 if value is Lower Level Detection (LLD), 0 otherwise."
-  )
+sediment_tbl <- tribble(
+  ~Name,       ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
+  "cruise_id", "TEXT",       "✓", "",         "Primary Key. Foreign Key to Cruise table.",
+  "core_id",   "TEXT",       "✓", "",         "Primary Key. Foreign Key to Core table.",
+  "sample_id", "TEXT",       "✓", "",         "Primary Key. Foreign Key to Sample table.",
+  "parameter", "TEXT",       "✓", "",         "Primary Key. Foreign Key to Parameter table.",
+  "value",     "REAL",       "",  "",         "Measured value.",
+  "is_lld",    "INTEGER",    "",  "",         "Flag: 1 if value is Lower Level Detection (LLD), 0 otherwise."
 )
 
 sediment_tbl
-
 ```
 
 ::: {.callout-note}
@@ -255,27 +162,13 @@ The lld table stores the Lower Level of Detection (LLD) values for measured elem
 
 ### Table Columns
 ``` {r}
-lld_tbl <- tibble(
-  `Name` = c(
-    "batch_id", "parameter", "value"
-  ),
-  `Data Type` = c(
-    "TEXT", "TEXT", "REAL"
-  ),
-  `PK` = c(
-    "✓", "✓", ""
-  ),
-  `NA Allowed` = c(
-    FALSE, FALSE, FALSE
-  ),
-  `Description` = c(
-    "Primary Key. Batch ID shared with Sample table.",
-    "Primary Key. Foreign Key to Parameter table.",
-    "LLD value."
-  )
+lld_tbl <- tribble(
+  ~Name,       ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
+  "batch_id",  "TEXT",       "✓", "",         "Primary Key. Batch ID shared with Sample table.",
+  "parameter", "TEXT",       "✓", "",         "Primary Key. Foreign Key to Parameter table.",
+  "value",     "REAL",       "",  "",         "LLD value."
 )
 
 lld_tbl
 
 ```
-
