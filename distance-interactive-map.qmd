@@ -74,17 +74,10 @@ The map below displays the spatial distribution of sediment cores. The markers a
 </style>
 ```
 
+{{< include _db-setup.qmd >}}
+
 ```{ojs}
 //| output: false
-
-// --- DB connection via stratum-tool ---
-db = {
-  const StratumSQLite = await window._stratumSQLite;
-  return StratumSQLite.open(window._dbPath, {
-    sqlJsPath: window._sqljsBase,
-    cacheKey:  "pilot-mareano@v0.1.7",
-  });
-}
 
 // --- Load Leaflet JS ---
 L = require("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")

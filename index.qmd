@@ -22,22 +22,12 @@ From the downloaded `ods` file, the data from the `INFO` and `INORGANIC` sheets 
 ## Count of Sediment Core Sites
 The table below summarizes the number of sediment core sites collected across six parameters for two cruise types (Mareano Cruise and Marine Basecamp Cruise) between 2003 and 2021.
 
+{{< include _db-setup.qmd >}}
+
 ```{ojs}
 //| output: false
-
-db = {
-  const StratumSQLite = await window._stratumSQLite;
-  return StratumSQLite.open(window._dbPath, {
-    sqlJsPath: window._sqljsBase,
-    cacheKey:  "pilot-mareano@v0.1.7",
-  });
-}
 
 aq = require("arquero")
-```
-
-```{ojs}
-//| output: false
 
 // --- Query: long format counts per cruise type, year, and element ---
 counts_long = db.query(`

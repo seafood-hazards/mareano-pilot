@@ -54,16 +54,10 @@ format:
 </style>
 ```
 
+{{< include _db-setup.qmd >}}
+
 ```{ojs}
 //| output: false
-
-db = {
-  const StratumSQLite = await window._stratumSQLite;
-  return StratumSQLite.open(window._dbPath, {
-    sqlJsPath: window._sqljsBase,
-    cacheKey:  "pilot-mareano@v0.1.7",
-  });
-}
 
 L = require("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")
 
