@@ -1,7 +1,7 @@
 options(timeout = 600)
 
 # ── SQLite database ────────────────────────────────────────────────────────
-db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.9/pilot_mareano.sqlite"
+db_url <- "https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.10/pilot_mareano.sqlite"
 local_db_file_name <- "pilot_mareano.sqlite"
 if (!file.exists(local_db_file_name)) {
   download.file(db_url, local_db_file_name, mode = "wb")
