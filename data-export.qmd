@@ -9,7 +9,7 @@ The data file was created for the initial analysis using the Mareano data.
 
 A tab-delimited file containing all major data from the database is available for download at the following location.
 
- * [pilot_mareano.tsv.gz](https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.9/pilot_mareano.tsv.gz)
+ * [pilot_mareano.tsv.gz](https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.10/pilot_mareano.tsv.gz)
 
 ## Data File Summary
 

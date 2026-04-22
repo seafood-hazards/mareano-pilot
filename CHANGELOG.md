@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.11] - 2026-04-22
+### Changed
+- replace incorrect grain size descriptions
+
 ## [0.1.10] - 2026-04-18
 ### Changed
 - latitude and longitude order
