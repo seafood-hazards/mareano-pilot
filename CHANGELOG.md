@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.12] - 2026-04-26
+### Fixed
+- table column format
+
 ## [0.1.11] - 2026-04-22
 ### Changed
 - replace incorrect grain size descriptions
