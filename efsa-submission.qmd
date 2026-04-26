@@ -74,7 +74,7 @@ efsa_submission_full <- efsa_submission %>%
   mutate(
     across(
       where(is.character),
-      ~replace_na(.x, "")
+      ~coalesce(.x, "")
     )
   ) %>%
   rename(c(`Source Table` = "Table", 

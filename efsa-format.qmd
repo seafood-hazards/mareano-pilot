@@ -51,7 +51,7 @@ readMe <- readMe %>%
   mutate(
     across(
       where(is.character),
-      ~replace_na(.x, "")
+      ~coalesce(.x, "")
     )
   )
 
@@ -126,7 +126,7 @@ spec <- spec %>%
   mutate(
     across(
       where(is.character),
-      ~replace_na(.x, "")
+      ~coalesce(.x, "")
     )
   )
 
