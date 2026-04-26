@@ -3,6 +3,12 @@ title: "EFSA Submission"
 subtitle: "Data export of trace elements for EFDA submission"
 ---
 
+```{css, echo=FALSE}
+th {
+  white-space: nowrap;
+}
+```
+
 The page presents the data export of trace elements in background sediments from the pilot database.
 
 ```{r}

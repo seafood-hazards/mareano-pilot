@@ -3,6 +3,12 @@ title: "Invalid Data"
 subtitle: "Correction of invalid data in the original Mareano dataset"
 ---
 
+```{css, echo=FALSE}
+th {
+  white-space: nowrap;
+}
+```
+
 The page presents the invalid data identified during the database creation process. Because the database enforces stringent constraints on the data structure, the data must be corrected before it can be imported into the database tables.
 
 ```{r}
