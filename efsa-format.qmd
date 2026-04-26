@@ -12,7 +12,8 @@ th {
 The page presents the the data format of the EFDA reporting tool necessary for submitting the background sediment data.
 
 ```{r}
-library(tidyverse)
+library(dplyr)
+library(tibble)
 library(knitr)
 
 readMe <- tribble(

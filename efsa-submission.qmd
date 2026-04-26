@@ -12,7 +12,8 @@ th {
 The page presents the data export of trace elements in background sediments from the pilot database.
 
 ```{r}
-library(tidyverse)
+library(dplyr)
+library(tibble)
 
 efsa_submission <- tribble(
   ~Column,            ~`Lookup`, ~Optionality, ~Table,     ~`Column Names`,                      ~`Fixed Text`, ~Missing,

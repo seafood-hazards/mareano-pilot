@@ -5,6 +5,7 @@
 **/*.quarto_ipynb
 /_site/
 /.Rhistory
+/.Rprofile
 
 /.idea
 
