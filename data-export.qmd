@@ -3,6 +3,12 @@ title: "Data Export"
 subtitle: A dataset file exported from the pilot database
 ---
 
+```{css, echo=FALSE}
+th {
+  white-space: nowrap;
+}
+```
+
 The data file was created for the initial analysis using the Mareano data. 
 
 ## Data Availability

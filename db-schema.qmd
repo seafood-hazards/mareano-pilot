@@ -3,6 +3,12 @@ title: "DB Schema"
 subtitle: A proposed database design based on Mareano Chemical Data 
 ---
 
+```{css, echo=FALSE}
+th {
+  white-space: nowrap;
+}
+```
+
 The page shows the database schema diagram along with table definitions based on the Mareano dataset.
 
 ## DB Schema Diagram
