@@ -1,6 +1,6 @@
 # Mareano Pilot Database
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19792995.svg)](https://doi.org/10.5281/zenodo.19792995)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20072673.svg)](https://doi.org/10.5281/zenodo.20072673)
 
 This repository contains the source Quarto Markdown documents for the [Mareano Pilot Database](https://seafood-hazards.github.io/mareano-pilot/) website.
 
