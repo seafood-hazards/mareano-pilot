@@ -217,7 +217,7 @@ function fmtVal(v) {
   if (legendEl) {
     legendEl.innerHTML = `
       <div class="legend-title">${selected_element.label}</div>
-      <div style="font-size:11px;color:#555">Avg (µg/kg) · ${year_start}–${year_end}</div>
+      <div style="font-size:11px;color:#555">Avg (mg/kg) · ${year_start}–${year_end}</div>
       <div class="legend-bar"></div>
       <div class="legend-labels">
         <span>${fmtVal(value_min)}</span> &nbsp;
