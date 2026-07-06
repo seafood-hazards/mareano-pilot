@@ -43,7 +43,7 @@ cruise_tbl <- tribble(
   "source",       "TEXT",       "",  "",         "Data source (Mareano).",
   "cruise_type",  "TEXT",       "",  "",         "Cruise type (Mareano Cruise/Marine Basecamp Cruise).",
   "year",         "INTEGER",    "",  "",         "Year of the cruise.",
-  "cruise_no",    "INTEGER",    "",  "✓",          "Cruise number.",
+  "cruise_no",    "TEXT",       "",  "✓",          "Cruise number.",
   "start",        "TEXT",       "",  "✓",          "Start date of the cruise",
   "end",          "TEXT",       "",  "✓",          "End date of the cruise",
   "start_year",   "INTEGER",    "",  "✓",          "Start year of the cruise",
@@ -52,8 +52,8 @@ cruise_tbl <- tribble(
   "end_year",     "INTEGER",    "",  "✓",          "End year of the cruise",
   "end_month",    "INTEGER",    "",  "✓",          "End month of the cruise",
   "end_day",      "INTEGER",    "",  "✓",          "End day of the cruise",
-  "area",         "INTEGER",    "",  "✓",          "Survey area.",
-  "cruise_no2",   "INTEGER",    "",  "✓",          "Alternative cruise number."
+  "area",         "TEXT",       "",  "✓",          "Survey area.",
+  "cruise_no2",   "TEXT",       "",  "✓",          "Alternative cruise number."
 )
 
 cruise_tbl
