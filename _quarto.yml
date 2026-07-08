@@ -37,9 +37,9 @@ website:
         menu:
           - text: "Export to Tabular File"
             href: data-export.qmd
-          - text: "EFSA Format"
+          - text: "EFSA Format v1"
             href: efsa-format.qmd
-          - text: "EFSA Submission"
+          - text: "EFSA Submission v1"
             href: efsa-submission.qmd
       - text: "Tools"
         menu:
