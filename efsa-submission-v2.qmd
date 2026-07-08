@@ -1,0 +1,70 @@
+---
+title: "EFSA Submission v2"
+subtitle: "Data export mapping for the FHF marine sediment data model"
+---
+
+```{css, echo=FALSE}
+th {
+  white-space: nowrap;
+}
+```
+
+The page presents the mapping between the pilot database fields and the [EFSA Format v2](efsa-format-v2.qmd) columns.
+
+```{r}
+library(dplyr)
+library(tibble)
+
+efsa_submission_v2 <- tribble(
+  ~Column,              ~Optionality,    ~`Source Table`,   ~`Source Columns`,                       ~`Fixed Text`,  ~Missing, ~Notes,
+  "sampleId",           "Recommended",   "Sample",          "cruise_id + core_id + sample_id",       NA,             NA,       NA,
+  "samplingStrategy",   "Recommended",   NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "pristine",           "Mandatory",     NA,                NA,                                      "yes",          NA,       NA,
+  "collDate",           "Mandatory",     "Cruise",          "start_year + start_month + start_day",  NA,             NA,       NA,
+  "placeColl",          "Mandatory",     "Core",            "sea_name",                              NA,             NA,       NA,
+  "lat",                "Recommended",   "Core",            "ddn",                                   NA,             NA,       NA,
+  "lon",                "Recommended",   "Core",            "dde",                                   NA,             NA,       NA,
+  "sedDepth",           "Mandatory",     "Sample",          "depth_from + depth_to",                 NA,             NA,       "Derived: map intervals to 0-5cm / 5-40cm / >40cm categories",
+  "traceEl",            "Mandatory",     "Parameter",       "element",                               NA,             NA,       NA,
+  "value",              "Mandatory",     "Sediment",        "value",                                 NA,             NA,       NA,
+  "sd",                 "Optional",      NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "unit",               "Mandatory",     "Parameter",       "unit",                                  NA,             NA,       NA,
+  "resultType",         "Recommended",   NA,                NA,                                      "dry weight",   NA,       NA,
+  "moisture",           "Recommended",   NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "convertedValue",     "Mandatory",     "Sediment",        "value",                                 NA,             NA,       "Values are already in mg/kg dry weight",
+  "extractionClass",    "Mandatory",     "Parameter",       "method1",                               NA,             NA,       "Derived: map analytical method to extraction class",
+  "methAn",             "Mandatory",     "Parameter",       "method1",                               NA,             NA,       NA,
+  "validatedMethod",    "Recommended",   NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "LOD",                "Mandatory",     "LLD",             "value",                                 NA,             NA,       NA,
+  "LODUnit",            "Mandatory",     "Parameter",       "unit",                                  NA,             NA,       "Same unit as the measured value",
+  "LOQ",                "Recommended",   NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "LOQUnit",            "Recommended",   NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "accLab",             "Mandatory",     NA,                NA,                                      "No",           NA,       NA,
+  "phSed",              "Optional",      NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "sieve",              "Mandatory",     NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "bulkAnalysis",       "Mandatory",     NA,                NA,                                      NA,             "Yes",    "Not recorded in DB",
+  "ocSed",              "Mandatory",     "Sediment",        "value",                                 NA,             NA,       "TOC% parameter",
+  "notes",              "Recommended",   NA,                NA,                                      NA,             "Yes",    "Not recorded in DB"
+)
+
+efsa_submission_v2 <- efsa_submission_v2 %>%
+  mutate(across(where(is.character), ~coalesce(.x, "")))
+```
+
+## Data Mapping for Submission
+
+```{r}
+efsa_submission_v2 %>%
+  filter(Missing != "Yes") %>%
+  select(-Missing)
+```
+
+## Full Data Mapping
+
+```{r}
+efsa_submission_v2
+```
+
+## Data Export Method
+
+As the submission tool is an Excel file, the data must be mapped column by column rather than through a standard row-based export. This approach ensures that the structure of the submission file is not disrupted.

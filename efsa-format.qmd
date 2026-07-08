@@ -1,5 +1,5 @@
 ---
-title: "EFSA Format"
+title: "EFSA Format v1"
 subtitle: "Data format of the EFDA reporting tool on trace elements"
 ---
 
