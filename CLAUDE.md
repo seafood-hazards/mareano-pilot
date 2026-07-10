@@ -27,7 +27,13 @@ Gitflow. No pull requests — merge feature branches directly and delete them wh
 | `download_resources.R` | SQLite download URL |
 | `data-export.qmd` | TSV download link |
 
-**Website release** — bump the version and add an entry to `CHANGELOG.md`, then merge `develop` into `main` (triggers CI/CD deploy to GitHub Pages).
+**Website release** — Gitflow release process:
+
+1. `git checkout -b release/vX.Y.Z develop`
+2. Set the date on the `[X.Y.Z]` entry in `CHANGELOG.md` and commit
+3. Merge into `main` with `--no-ff`, tag `vX.Y.Z`
+4. Merge back into `develop` with `--no-ff`, delete the release branch
+5. Push `main`, `develop`, and the tag — CI/CD deploys to GitHub Pages
 
 ## Stack
 
