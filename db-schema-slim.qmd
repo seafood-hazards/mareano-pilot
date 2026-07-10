@@ -47,10 +47,10 @@ The dataset table represents a data collection campaign or source (e.g., Mareano
 dataset_tbl <- tribble(
   ~Name,          ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
   "dataset_id",   "INTEGER",    "✓", "",            "Primary Key. Unique dataset identifier.",
-  "source_db",    "TEXT",       "",  "",            "Name of the source database (e.g., Mareano).",
+  "source",       "TEXT",       "",  "",            "Name of the source database (e.g., Mareano).",
   "country",      "TEXT",       "",  "",            "Country of origin.",
   "institute",    "TEXT",       "",  "",            "Institute responsible for data collection.",
-  "project_name", "TEXT",       "",  "",            "Name of the data collection campaign."
+  "dataset_name", "TEXT",       "",  "",            "Name of the data collection campaign."
 )
 
 dataset_tbl
