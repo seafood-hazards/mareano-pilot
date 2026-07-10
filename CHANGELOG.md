@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.19] - 2026-07-10
+### Fixed
+- Add missing slim DB schema images
+
 ## [0.1.18] - 2026-07-10
 ### Added
 - DB Schema (Slim) page for the common multi-source schema
