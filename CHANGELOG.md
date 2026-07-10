@@ -6,7 +6,7 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
-## [0.1.17]
+## [0.1.17] - 2026-07-10
 ### Added
 - EFSA Format v2 and EFSA Submission v2 pages
 - CLAUDE.md for AI-assisted development context
