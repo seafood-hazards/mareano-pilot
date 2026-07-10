@@ -1,6 +1,6 @@
 ---
-title: "DB Schema"
-subtitle: A proposed database design based on Mareano Chemical Data 
+title: "DB Schema (Full)"
+subtitle: A proposed database design based on Mareano Chemical Data
 ---
 
 ```{css, echo=FALSE}
