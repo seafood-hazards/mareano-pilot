@@ -17,6 +17,18 @@ CI/CD: `.github/workflows/publish.yml` — triggers on push to `main`, renders a
 
 Gitflow. No pull requests — merge feature branches directly and delete them when done.
 
+## Releasing
+
+**New DB version** (e.g. v0.1.15 → v0.1.16) — update the version string in these three files:
+
+| File | What to update |
+|---|---|
+| `_db-setup.qmd` | `cacheKey` string |
+| `download_resources.R` | SQLite download URL |
+| `data-export.qmd` | TSV download link |
+
+**Website release** — bump the version and add an entry to `CHANGELOG.md`, then merge `develop` into `main` (triggers CI/CD deploy to GitHub Pages).
+
 ## Stack
 
 - **Quarto** — static site generator; R chunks for tables, OJS blocks for interactivity

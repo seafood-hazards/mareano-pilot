@@ -7,6 +7,8 @@ project:
   render:
     - "*.qmd"
     - "!CHANGELOG.md"
+    - "!CLAUDE.md"
+    - "!README.md"
 
 website:
   title: "Mareano Pilot"
