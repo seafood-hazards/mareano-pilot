@@ -23,8 +23,10 @@ website:
         href: index.qmd
       - text: "DB Design"
         menu:
-          - text: "DB Schema"
+          - text: "DB Schema (Full)"
             href: db-schema.qmd
+          - text: "DB Schema (Slim)"
+            href: db-schema-slim.qmd
           - text: "Invalid Data"
             href: invalid-data.qmd
       - text: "Geospatial Analysis"
