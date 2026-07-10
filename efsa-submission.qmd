@@ -1,5 +1,5 @@
 ---
-title: "EFSA Submission"
+title: "EFSA Submission v1"
 subtitle: "Data export of trace elements for EFDA submission"
 ---
 
@@ -78,7 +78,7 @@ efsa_submission_full <- efsa_submission %>%
     )
   ) %>%
   rename(c(`Source Table` = "Table", 
-           `Soruce Columns` = "Column Names"))
+           `Source Columns` = "Column Names"))
 
 efsa_submission <- efsa_submission_full %>%
   filter(Lookup != "Yes") %>%

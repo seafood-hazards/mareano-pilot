@@ -6,6 +6,24 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.17] - 2026-07-10
+### Added
+- EFSA Format v2 and EFSA Submission v2 pages
+- CLAUDE.md for AI-assisted development context
+- Missing LLD Values section to Invalid Data page
+
+### Changed
+- Renamed EFSA Format and EFSA Submission pages to v1
+- Restructured Sample Batch IDs section in Invalid Data page
+- Updated home page to include links for EFSA v1 and v2 pages
+- Added comment column to lld table in DB schema
+- Excluded CLAUDE.md and README.md from Quarto rendering
+- Bumped resource URLs to v0.1.16
+
+## [0.1.16] - 2026-07-10
+### Added
+- Marine Basecamp Cruise 2023 and 2025 data
+
 ## [0.1.15] - 2026-07-06
 ### Added
 - Marine Basecamp Cruise 2023 and 2025 data
