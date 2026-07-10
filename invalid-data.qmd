@@ -49,17 +49,24 @@ cruise_correction_rules <- tribble(
   "26",        "delete",  "Duplicate cruise"
 )
 
+incorrect_batch_ids <- tibble::tribble(
+  ~`Cruise ID`,   ~`New Batch ID`, ~Reason,
+  "MA-2021-103",  "2021.0031",     "Incorrect batch ID; corrected to the previous cruise batch",
+  "MA-2021-104",  "2021.0031",     "Incorrect batch ID; corrected to the previous cruise batch",
+  "MA-2021-115",  "2021.0031",     "Incorrect batch ID; corrected to the previous cruise batch"
+)
+
 df_missing_batch_ids <- tibble::tribble(
-  ~`Cruise ID`,     ~`Batch ID`,
-  "MA-2007-105",  "2008.0009",
-  "MA-2007-111",  "2008.0009",
-  "MA-2009-105",  "2010.021",
-  "MA-2009-111",  "2010.021",
-  "MA-2010-110",  "2011.003",
-  "MA-2010-112",  "2011.003",
-  "MA-2020-2002", "2020.0118",
-  "MA-2021-2005", "2020.0161",
-  "MA-2021-2102", "2021.211"
+  ~`Cruise ID`,     ~`Old Batch ID`, ~`New Batch ID`,
+  "MA-2007-105",  "2008.0009",     "2008.0029",
+  "MA-2007-111",  "2008.0009",     "2008.0029",
+  "MA-2009-105",  "2010.021",      "2009.0222",
+  "MA-2009-111",  "2010.021",      "2009.0222",
+  "MA-2010-110",  "2011.003",      "2011.0030",
+  "MA-2010-112",  "2011.003",      "2011.0030",
+  "MA-2020-2002", "2020.0118",     "2020.0021",
+  "MA-2021-2005", "2020.0161",     "2020.0021",
+  "MA-2021-2102", "2021.211",      "2021.0003"
 )
 
 ```
@@ -155,16 +162,35 @@ element_additions %>%
 
 ## Sample Batch IDs
 
-::: {.callout-warning}
-Sample batch IDs are required to look up lower limits of detection (LLD), but many are missing in the LLD table. This issue is particularly common for samples collected during the Mareano cruise in 2021, where several entries lack proper batch IDs.
-:::
-
   * **Excel Sheets**: `INFO` & `INORGANIC`
   * **Ranges**: H91:AF141 in `INFO` & Column O in `INORGANIC`
 
-The table below lists sample batch IDs that have no associated LLD values. It also includes a few samples from the Mareano 2021 cruise that do have valid batch IDs but still lack corresponding LLD entries.
+### Incorrect Batch IDs
+
+::: {.callout-warning}
+Cruises MA-2021-103, MA-2021-104, and MA-2021-115 contain incorrect batch IDs. These were corrected to `2021.0031`, the batch ID of the preceding cruise.
+:::
+
+```{r}
+incorrect_batch_ids %>%
+  kable(caption = "Incorrect batch IDs and their corrections.")
+```
+
+### Batch IDs Without LLD Entries
+
+::: {.callout-warning}
+Several batch IDs have no associated LLD values in the LLD table. These were replaced with the correct batch IDs identified from the source data.
+:::
 
 ```{r}
 df_missing_batch_ids %>%
-  kable(caption = "Batch IDs without associated LLD.")
+  kable(caption = "Batch IDs corrected to match existing LLD entries.")
 ```
+
+## Missing LLD Values
+
+::: {.callout-warning}
+Many elements lack LLD values for certain parameters. These missing values were filled using a rightward-fill strategy.
+:::
+
+Within each batch, LLD values are arranged in columns from left to right by parameter. Some elements have no initial LLD value in the leftmost columns. To ensure all parameters have an LLD value, missing entries were filled by carrying forward the nearest available value from the right rather than from the left.
