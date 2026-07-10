@@ -172,7 +172,8 @@ lld_tbl <- tribble(
   ~Name,       ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
   "batch_id",  "TEXT",       "✓", "",         "Primary Key. Batch ID shared with Sample table.",
   "parameter", "TEXT",       "✓", "",         "Primary Key. Foreign Key to Parameter table.",
-  "value",     "REAL",       "",  "",         "LLD value."
+  "value",     "REAL",       "",  "",         "LLD value.",
+  "comment",   "TEXT",       "",  "✓",          "Comments for analytical methods and LLDs."
 )
 
 lld_tbl
