@@ -6,6 +6,11 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.20] - 2026-07-10
+### Changed
+- Rename `source_db` to `source` and `project_name` to `dataset_name` in slim DB schema
+- Update slim DB schema images
+
 ## [0.1.19] - 2026-07-10
 ### Fixed
 - Add missing slim DB schema images
