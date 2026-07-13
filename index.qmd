@@ -80,7 +80,8 @@ Inputs.table(counts_wide, {
 
 After creating the ER (Entity–Relationship) diagram, the tables were implemented in a single SQLite file containing six tables. All required data were extracted from the Mareano tabular file and imported into the corresponding tables.
 
-- See the [DB Schema](./db-schema.qmd) page for details of the database architecture.
+- See the [DB Schema (Full)](./db-schema.qmd) page for details of the full database architecture.
+- See the [DB Schema (Slim)](./db-schema-slim.qmd) page for the common multi-source schema.
 - See the [Invalid Data](./invalid-data.qmd) page for issues identified in the Mareano dataset.
 
 ## Geospatial Analysis
