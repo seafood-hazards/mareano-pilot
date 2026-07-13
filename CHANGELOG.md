@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.24] - 2026-07-13
+### Fixed
+- Typo in EFSA format and submission page subtitles (EFDA → EFSA)
+
 ## [0.1.23] - 2026-07-13
 ### Changed
 - Update page list in CLAUDE.md
