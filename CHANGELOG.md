@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.22] - 2026-07-13
+### Changed
+- Move slim DB schema link after Invalid Data in menu and home page
+
 ## [0.1.21] - 2026-07-13
 ### Changed
 - Add slim DB schema link to home page
