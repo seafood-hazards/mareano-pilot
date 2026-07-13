@@ -1,6 +1,6 @@
 ---
 title: "EFSA Format v1"
-subtitle: "Data format of the EFDA reporting tool on trace elements"
+subtitle: "Data format of the EFSA reporting tool on trace elements"
 ---
 
 ```{css, echo=FALSE}
