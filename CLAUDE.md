@@ -72,13 +72,16 @@ Every page that queries the DB includes `_db-setup.qmd`, which opens the SQLite 
 | File | Description |
 |---|---|
 | `index.qmd` | Home — pipeline overview, sediment core count table |
-| `db-schema.qmd` | ER diagram + table column definitions |
+| `db-schema.qmd` | DB Schema (Full) — ER diagram + table column definitions |
 | `invalid-data.qmd` | Data corrections applied to raw Mareano source |
+| `db-schema-slim.qmd` | DB Schema (Slim) — common multi-source schema |
 | `distance-to-coast.qmd` | Distance calculation methods + map (Observable Plot) |
 | `location-names.qmd` | Country/municipality/sea name estimation methods |
 | `distance-interactive-map.qmd` | Leaflet map, markers color-coded by distance category |
 | `data-export.qmd` | Flat TSV export format description |
-| `efsa-format.qmd` | EFSA submission column schema and catalogue tables |
-| `efsa-submission.qmd` | DB field → EFSA column mapping |
+| `efsa-format.qmd` | EFSA Format v1 — submission column schema and catalogue tables |
+| `efsa-submission.qmd` | EFSA Submission v1 — DB field → EFSA column mapping |
+| `efsa-format-v2.qmd` | EFSA Format v2 — FHF marine sediment data model column schema |
+| `efsa-submission-v2.qmd` | EFSA Submission v2 — DB field → FHF format mapping |
 | `pilot-db-viewer.qmd` | Paginated read-only SQLite table browser |
 | `sediment-map.qmd` | Leaflet map with element selector and year range filter |
