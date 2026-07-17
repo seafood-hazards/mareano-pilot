@@ -58,15 +58,15 @@ dataset_tbl
 
 ## Site Table
 
-The site table stores unique geographic locations, keyed on latitude and longitude rounded to two decimal places, and depth.
+The site table stores unique geographic locations, keyed on latitude and longitude rounded to three decimal places, and depth.
 
 ### Table Columns
 ```{r}
 site_tbl <- tribble(
   ~Name,           ~`Data Type`, ~PK, ~`NA Allowed`, ~Description,
   "site_id",       "INTEGER",    "✓", "",            "Primary Key. Unique site identifier.",
-  "latitude",      "REAL",       "",  "",            "Latitude in decimal degrees (rounded to 2 d.p.).",
-  "longitude",     "REAL",       "",  "",            "Longitude in decimal degrees (rounded to 2 d.p.).",
+  "latitude",      "REAL",       "",  "",            "Latitude in decimal degrees (rounded to 3 d.p.).",
+  "longitude",     "REAL",       "",  "",            "Longitude in decimal degrees (rounded to 3 d.p.).",
   "depth",         "REAL",       "",  "✓",           "Water depth in meters (positive downward).",
   "country",       "TEXT",       "",  "✓",           "Nearest country.",
   "country_code",  "TEXT",       "",  "✓",           "ISO country code.",
