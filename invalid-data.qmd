@@ -17,7 +17,7 @@ library(dplyr)
 library(knitr)
 
 invalid_full_ids_examples <- tribble(
-  ~`Full ID (icorrect format)`,                    ~`Expected ID`,                 ~`Year`, ~`Number`, ~`Tool`, ~`ID`, ~Issue,
+  ~`Full ID (incorrect format)`,                    ~`Expected ID`,                 ~`Year`, ~`Number`, ~`Tool`, ~`ID`, ~Issue,
   "2008104R0243GR037c0_Gr-243", "2008104R0243GR037c0_00-01", 2008,           "104",            "GR",             "037",                      "Format incorrect (used 'Gr-243' instead of depth interval)",
   "2009111R0447BC481c0_00-01",  "2009105R0447BC481c0_00-01", 2009,           "105",            "BC",             "481",                      "Wrong cruise number",
   "2011113R0749MC020c3_03-04",  "2011113R0749MC020c0_03-04", 2011,           "113",            "MC",             "020",                      "Used core ID (c3) instead of base (c0)",
@@ -131,14 +131,14 @@ cruise_correction_rules %>%
 ## Element Definitions
 
 ::: {.callout-warning}
-An incorrect element name appear in the element list and must be corrected.
+An incorrect element name appears in the element list and must be corrected.
 :::
 
 
   * **Excel Sheet**: `INFO`
   * **Range**: A125:B125
 
-The incorrect element entry for ``Cd_p`` is corrected to from ``Calcium`` and ``Cadmium``.
+The incorrect element entry for ``Cd_p`` is corrected from ``Calcium`` to ``Cadmium``.
 
 ```{r}
 element_corrections %>%
