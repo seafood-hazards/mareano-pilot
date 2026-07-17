@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.25] - 2026-07-17
+### Changed
+- Update site lat/lon rounding to 3 decimal places in slim DB schema
+
 ## [0.1.24] - 2026-07-13
 ### Fixed
 - Typo in EFSA format and submission page subtitles (EFDA → EFSA)
