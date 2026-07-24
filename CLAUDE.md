@@ -75,6 +75,7 @@ Every page that queries the DB includes `_db-setup.qmd`, which opens the SQLite 
 | `db-schema.qmd` | DB Schema (Full) — ER diagram + table column definitions |
 | `invalid-data.qmd` | Data corrections applied to raw Mareano source |
 | `db-schema-slim.qmd` | DB Schema (Slim) — common multi-source schema |
+| `database-downloads.qmd` | Database Downloads — links to full and slim SQLite files |
 | `distance-to-coast.qmd` | Distance calculation methods + map (Observable Plot) |
 | `location-names.qmd` | Country/municipality/sea name estimation methods |
 | `distance-interactive-map.qmd` | Leaflet map, markers color-coded by distance category |
