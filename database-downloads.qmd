@@ -1,0 +1,26 @@
+---
+title: "Database Downloads"
+subtitle: Download links for the SQLite database files
+---
+
+```{css, echo=FALSE}
+th {
+  white-space: nowrap;
+}
+```
+
+Two versions of the SQLite database are published as assets on the same [GitHub release](https://github.com/seafood-hazards/mareano-pilot/releases/tag/v0.1.16): the full Mareano schema used by this site, and the slim, multi-source-friendly schema.
+
+## Available Databases
+
+```{r}
+library(tibble)
+
+database_tbl <- tribble(
+  ~Version, ~File,                    ~Schema,                                                                               ~Download,
+  "Full",   "pilot_mareano.sqlite",   "<a href='./db-schema.qmd'>DB Schema (Full)</a>",                                     "<a href='https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.16/pilot_mareano.sqlite'>Download</a>",
+  "Slim",   "mareano_slim.sqlite",    "<a href='./db-schema-slim.qmd'>DB Schema (Slim)</a>",                                 "<a href='https://github.com/seafood-hazards/mareano-pilot/releases/download/v0.1.16/mareano_slim.sqlite'>Download</a>"
+)
+
+knitr::kable(database_tbl, escape = FALSE)
+```
