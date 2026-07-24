@@ -83,6 +83,7 @@ After creating the ER (Entity–Relationship) diagram, the tables were implement
 - See the [DB Schema (Full)](./db-schema.qmd) page for details of the full database architecture.
 - See the [Invalid Data](./invalid-data.qmd) page for issues identified in the Mareano dataset.
 - See the [DB Schema (Slim)](./db-schema-slim.qmd) page for the common multi-source schema.
+- See the [Database Downloads](./database-downloads.qmd) page for links to download the full and slim SQLite database files.
 
 ## Geospatial Analysis
 
