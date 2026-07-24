@@ -6,6 +6,10 @@ As this project is still in active development, it does not yet strictly adhere 
 
 ## [Unreleased]
 
+## [0.1.27] - 2026-07-24
+### Added
+- Database Downloads page with links to full and slim SQLite database files
+
 ## [0.1.26] - 2026-07-17
 ### Fixed
 - Spelling and grammar errors in EFSA Format v1 and Invalid Data pages
